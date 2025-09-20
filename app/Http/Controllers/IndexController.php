@@ -17,7 +17,7 @@ class IndexController extends Controller
         $total = $consolidado->where('totais', 1)->sum('valor');
         $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.$consolidado->where('nome', 'mes_atual')->first()->valor);
 
-        for ($i=0;$i<=6;$i++) {
+        for ($i=0;$i<=7;$i++) {
             $movimentacoes_mes[$i] = $movimentacao->mes($data);
             $data->addMonth();
         }

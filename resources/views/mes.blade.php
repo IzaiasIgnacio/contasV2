@@ -7,23 +7,23 @@
 <div>
     <div class="flex justify-between items-center text-sm border-b border-gray-500 bg-opacity-50 px-2 bg-blue-600">
         <div class="flex items-center gap-1">
-            <span class="text-gray-400 text-base font-bold">Salário</span>
+            <span class="text-gray-400 text-base font-semibold">Salário</span>
             <div class="w-4 h-3 bg-blue-600 rounded text-xs"></div>
         </div>
-        <span class="text-gray-400 text-base font-bold">{{$mes['salario']}}</span>
+        <span class="text-gray-400 text-base font-semibold">{{$mes['salario']}}</span>
     </div>
     @foreach ($mes['movimentacoes'] as $movimentacao)
     <div class="flex justify-between items-center text-sm border-b border-gray-500 bg-opacity-50 px-2
-    @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'pago') bg-green-700 @endif
+    @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'pago') bg-green-800 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'pago') bg-blue-700 @endif
     @if($movimentacao->tipo == 'renda') bg-blue-500 @endif
     @if($movimentacao->status == 'planejado') bg-gray-600 @endif
     ">
         <div class="flex items-center gap-1">
-            <span class="text-gray-400 text-base font-bold">{{$movimentacao->nome}}</span>
+            <span class="text-gray-400 text-base font-semibold">{{$movimentacao->nome}}</span>
             <div class="w-4 h-3 bg-blue-600 rounded text-xs"></div>
         </div>
-        <span class="text-gray-400 text-base font-bold">{{$movimentacao->valor}}</span>
+        <span class="text-gray-400 text-base font-semibold">{{$movimentacao->valor}}</span>
     </div>
     @endforeach
 </div>

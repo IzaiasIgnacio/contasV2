@@ -11,224 +11,227 @@
         }
     </script>
 </head>
-<body class="bg-black text-white min-h-screen">
-    <!-- Navegação Superior -->
-    <nav class="bg-black border-b border-gray-700 p-2">
-        <div class="w-full flex flex-col lg:flex-row justify-between items-center px-4 gap-2">
-            <div class="flex flex-col items-start gap-2">
-                <div class="flex items-center gap-3">
-                    <button onclick="openDateModal()" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-                        </svg>
-                    </button>
-                    <span class="text-xl text-white-400" id="currentDate">Janeiro 2024</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="openBankModal()" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                        </svg>
-                    </button>
-                    <p class="text-xl lg:text-2xl text-white-400">{{$total}}</p>
-                </div>
-            </div>
-            
-            <!-- Cartões -->
-            <div class="flex gap-1 lg:gap-2 overflow-x-auto lg:overflow-visible w-full lg:w-auto justify-center">
-               @foreach ($cartoes as $cartao)
-                <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-1 lg:p-2 text-white w-36 lg:w-48 flex-shrink-0">
-                    <div class="flex justify-end mb-1">
-                        <span class="text-sm font-bold">{{$cartao->rotulo}}</span>
-                    </div>
-                    <p class="text-sm">5000 / 3200</p>
-                    <p class="text-sm">15/01 / 16/01</p>
-                </div>
-               @endforeach
-            </div>
-            
-            <div class="flex gap-3">
-                <button class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"/>
+<body class="bg-black text-white min-h-screen flex">
+    <!-- Barra Lateral Esquerda -->
+    <aside class="w-52 bg-black border-r border-gray-700 p-4 flex flex-col gap-4">
+        <!-- Mês e Total -->
+        <div class="flex flex-col items-start gap-4">
+            <div class="flex items-center gap-3">
+                <button onclick="openDateModal()" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                     </svg>
                 </button>
-                <button class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3h4v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+                <span class="text-xl text-white-400" id="currentDate">Janeiro 2024</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="openBankModal()" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                     </svg>
                 </button>
+                <p class="text-xl lg:text-2xl text-white-400">{{$total}}</p>
             </div>
         </div>
-    </nav>
 
-    <!-- Tabelas de Meses -->
-    <section class="px-4 pt-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-3">
-            @foreach ($movimentacoes_mes as $mes)
-                <div class="bg-slate-900 rounded-lg border border-gray-700">
-                    @include('mes', ['mes' => $mes])
-                </div>
-            @endforeach
-    </section>
-
-    <!-- Tabelas de Terceiros -->
-    <section class="px-4 pt-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-3">
-            <!-- Janeiro 2024 - Terceiros -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Janeiro 2024</h3>
-                        <button onclick="openModal('jan-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                        <span class="text-white">Mãe - Remédio</span>
-                        <span class="text-white">120</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                        <span class="text-white">Irmão - Gasolina</span>
-                        <span class="text-white">80</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 px-2">
-                        <span class="text-white">Pai - Mercado</span>
-                        <span class="text-white">200</span>
-                    </div>
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-purple-400">
-                        <span>Total Terceiros:</span>
-                        <span>R$ 400</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fevereiro 2024 - Terceiros -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Fevereiro 2024</h3>
-                        <button onclick="openModal('fev-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                        <span class="text-white">Mãe - Consulta</span>
-                        <span class="text-white">150</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 px-2">
-                        <span class="text-white">Sogra - Compras</span>
-                        <span class="text-white">90</span>
-                    </div>
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-purple-400">
-                        <span>Total Terceiros:</span>
-                        <span>R$ 240</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Março 2024 - Terceiros -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Março 2024</h3>
-                        <button onclick="openModal('mar-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-purple-400">
-                        <span>Total Terceiros:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Abril 2024 - Terceiros -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Abril 2024</h3>
-                        <button onclick="openModal('abr-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-purple-400">
-                        <span>Total Terceiros:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Maio 2024 - Terceiros -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Maio 2024</h3>
-                        <button onclick="openModal('mai-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-purple-400">
-                        <span>Total Terceiros:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Junho 2024 - Terceiros -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Junho 2024</h3>
-                        <button onclick="openModal('jun-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-purple-400">
-                        <span>Total Terceiros:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Julho 2024 - Terceiros -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Julho 2024</h3>
-                        <button onclick="openModal('jul-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-purple-400">
-                        <span>Total Terceiros:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
+        <!-- Botões de Ação -->
+        <div class="flex flex-col gap-3">
+            <button class="w-full flex justify-center p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"/>
+                </svg>
+            </button>
+            <button class="w-full flex justify-center p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3h4v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+                </svg>
+            </button>
         </div>
-    </section>
 
+        <!-- Cartões -->
+        <div class="flex flex-col gap-2">
+           @foreach ($cartoes as $cartao)
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-2 text-white w-full">
+                <div class="flex justify-end mb-1">
+                    <span class="text-sm font-bold">{{$cartao->rotulo}}</span>
+                </div>
+                <p class="text-sm">5000 / 3200</p>
+                <p class="text-sm">15/01 / 16/01</p>
+            </div>
+           @endforeach
+        </div>
+    </aside>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Tabelas de Meses -->
+        <section class="px-4 pt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3">
+                @foreach ($movimentacoes_mes as $mes)
+                    <div class="bg-slate-900 rounded-lg border border-gray-700">
+                        @include('mes', ['mes' => $mes])
+                    </div>
+                @endforeach
+            </div>
+        </section>
+
+        <!-- Tabelas de Terceiros -->
+        <section class="px-4 pt-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3">
+                <!-- Janeiro 2024 - Terceiros -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700">
+                    <div class="p-2 border-b border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-medium text-gray-200">Janeiro 2024</h3>
+                            <button onclick="openModal('jan-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
+                        </svg>
+                    </div>
+                    <div class="">
+                        <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
+                            <span class="text-white">Mãe - Remédio</span>
+                            <span class="text-white">120</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
+                            <span class="text-white">Irmão - Gasolina</span>
+                            <span class="text-white">80</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-0.5 px-2">
+                            <span class="text-white">Pai - Mercado</span>
+                            <span class="text-white">200</span>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t border-gray-700 text-sm">
+                        <div class="flex justify-between text-purple-400">
+                            <span>Total Terceiros:</span>
+                            <span>R$ 400</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fevereiro 2024 - Terceiros -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700">
+                    <div class="p-2 border-b border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-medium text-gray-200">Fevereiro 2024</h3>
+                            <button onclick="openModal('fev-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
+                            <span class="text-white">Mãe - Consulta</span>
+                            <span class="text-white">150</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs py-0.5 px-2">
+                            <span class="text-white">Sogra - Compras</span>
+                            <span class="text-white">90</span>
+                        </div>
+                    </div>
+                    <div class="p-4 border-t border-gray-700 text-sm">
+                        <div class="flex justify-between text-purple-400">
+                            <span>Total Terceiros:</span>
+                            <span>R$ 240</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Março 2024 - Terceiros -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700">
+                    <div class="p-2 border-b border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-medium text-gray-200">Março 2024</h3>
+                            <button onclick="openModal('mar-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <!-- Vazio -->
+                    </div>
+                    <div class="p-4 border-t border-gray-700 text-sm">
+                        <div class="flex justify-between text-purple-400">
+                            <span>Total Terceiros:</span>
+                            <span>R$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Abril 2024 - Terceiros -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700">
+                    <div class="p-2 border-b border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-medium text-gray-200">Abril 2024</h3>
+                            <button onclick="openModal('abr-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <!-- Vazio -->
+                    </div>
+                    <div class="p-4 border-t border-gray-700 text-sm">
+                        <div class="flex justify-between text-purple-400">
+                            <span>Total Terceiros:</span>
+                            <span>R$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maio 2024 - Terceiros -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700">
+                    <div class="p-2 border-b border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-medium text-gray-200">Maio 2024</h3>
+                            <button onclick="openModal('mai-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <!-- Vazio -->
+                    </div>
+                    <div class="p-4 border-t border-gray-700 text-sm">
+                        <div class="flex justify-between text-purple-400">
+                            <span>Total Terceiros:</span>
+                            <span>R$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Junho 2024 - Terceiros -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700">
+                    <div class="p-2 border-b border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-medium text-gray-200">Junho 2024</h3>
+                            <button onclick="openModal('jun-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <!-- Vazio -->
+                    </div>
+                    <div class="p-4 border-t border-gray-700 text-sm">
+                        <div class="flex justify-between text-purple-400">
+                            <span>Total Terceiros:</span>
+                            <span>R$ 0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Julho 2024 - Terceiros -->
+                <div class="bg-gray-800 rounded-lg border border-gray-700">
+                    <div class="p-2 border-b border-gray-700">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-sm font-medium text-gray-200">Julho 2024</h3>
+                            <button onclick="openModal('jul-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <!-- Vazio -->
+                    </div>
+                    <div class="p-4 border-t border-gray-700 text-sm">
+                        <div class="flex justify-between text-purple-400">
+                            <span>Total Terceiros:</span>
+                            <span>R$ 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Modal para Adicionar Transação -->
     <div id="transactionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
