@@ -11,9 +11,9 @@
         }
     </script>
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-black text-white min-h-screen">
     <!-- Navegação Superior -->
-    <nav class="bg-gray-800 border-b border-gray-700 p-2">
+    <nav class="bg-black border-b border-gray-700 p-2">
         <div class="w-full flex flex-col lg:flex-row justify-between items-center px-4 gap-2">
             <div class="flex flex-col items-start gap-2">
                 <div class="flex items-center gap-3">
@@ -30,80 +30,21 @@
                             <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                         </svg>
                     </button>
-                    <p class="text-xl lg:text-2xl font-bold text-green-400">15.847,32</p>
+                    <p class="text-xl lg:text-2xl text-white-400">{{$total}}</p>
                 </div>
             </div>
             
+            <!-- Cartões -->
             <div class="flex gap-1 lg:gap-2 overflow-x-auto lg:overflow-visible w-full lg:w-auto justify-center">
-                <!-- Cartão 1 -->
-                <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-1 lg:p-2 text-white w-20 lg:w-32 flex-shrink-0">
+               @foreach ($cartoes as $cartao)
+                <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-1 lg:p-2 text-white w-36 lg:w-48 flex-shrink-0">
                     <div class="flex justify-end mb-1">
-                        <span class="text-xs font-medium">VISA</span>
+                        <span class="text-sm font-bold">{{$cartao->rotulo}}</span>
                     </div>
-                    <p class="text-xs opacity-90">5.000</p>
-                    <p class="text-xs font-bold">3.200</p>
-                    <p class="text-xs opacity-75">15/01</p>
+                    <p class="text-sm">5000 / 3200</p>
+                    <p class="text-sm">15/01 / 16/01</p>
                 </div>
-
-                <!-- Cartão 2 -->
-                <div class="bg-gradient-to-r from-red-600 to-red-800 rounded-lg p-1 lg:p-2 text-white w-20 lg:w-32 flex-shrink-0">
-                    <div class="flex justify-end mb-1">
-                        <span class="text-xs font-medium">MASTER</span>
-                    </div>
-                    <p class="text-xs opacity-90">8.000</p>
-                    <p class="text-xs font-bold">6.500</p>
-                    <p class="text-xs opacity-75">20/01</p>
-                </div>
-
-                <!-- Cartão 3 -->
-                <div class="bg-gradient-to-r from-purple-600 to-purple-800 rounded-lg p-1 lg:p-2 text-white w-20 lg:w-32 flex-shrink-0">
-                    <div class="flex justify-end mb-1">
-                        <span class="text-xs font-medium">ELO</span>
-                    </div>
-                    <p class="text-xs opacity-90">3.000</p>
-                    <p class="text-xs font-bold">2.100</p>
-                    <p class="text-xs opacity-75">10/01</p>
-                </div>
-
-                <!-- Cartão 4 -->
-                <div class="bg-gradient-to-r from-green-600 to-green-800 rounded-lg p-1 lg:p-2 text-white w-20 lg:w-32 flex-shrink-0">
-                    <div class="flex justify-end mb-1">
-                        <span class="text-xs font-medium">AMEX</span>
-                    </div>
-                    <p class="text-xs opacity-90">10.000</p>
-                    <p class="text-xs font-bold">8.500</p>
-                    <p class="text-xs opacity-75">25/01</p>
-                </div>
-
-                <!-- Cartão 5 -->
-                <div class="bg-gradient-to-r from-orange-600 to-orange-800 rounded-lg p-1 lg:p-2 text-white w-20 lg:w-32 flex-shrink-0">
-                    <div class="flex justify-end mb-1">
-                        <span class="text-xs font-medium">HIPER</span>
-                    </div>
-                    <p class="text-xs opacity-90">2.000</p>
-                    <p class="text-xs font-bold">1.800</p>
-                    <p class="text-xs opacity-75">12/01</p>
-                </div>
-
-                <!-- Cartão 6 -->
-                <div class="bg-gradient-to-r from-pink-600 to-pink-800 rounded-lg p-1 lg:p-2 text-white w-20 lg:w-32 flex-shrink-0">
-                    <div class="flex justify-end mb-1">
-                        <span class="text-xs font-medium">NUBANK</span>
-                    </div>
-                    <p class="text-xs opacity-90">6.000</p>
-                    <p class="text-xs font-bold">4.200</p>
-                    <p class="text-xs opacity-75">18/01</p>
-                </div>
-
-                <!-- Cartão 7 -->
-                <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-lg p-1 lg:p-2 text-white w-20 lg:w-32 flex-shrink-0">
-                    <div class="flex justify-end mb-1">
-                        <span class="text-xs font-medium">INTER</span>
-                    </div>
-                    <p class="text-xs opacity-90">4.000</p>
-                    <p class="text-xs font-bold">3.500</p>
-                    <p class="text-xs opacity-75">22/01</p>
-                </div>
+               @endforeach
             </div>
             
             <div class="flex gap-3">
@@ -125,245 +66,11 @@
     <!-- Tabelas de Meses -->
     <section class="px-4 pt-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-3">
-            <!-- Janeiro 2024 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Janeiro 2024</h3>
-                        <button onclick="openModal('jan')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
+            @foreach ($movimentacoes_mes as $mes)
+                <div class="bg-slate-900 rounded-lg border border-gray-700">
+                    @include('mes', ['mes' => $mes])
                 </div>
-                <div class="h-64 overflow-y-auto">
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 bg-green-600 bg-opacity-50 px-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-white">Mercado</span>
-                            <div class="w-4 h-3 bg-blue-600 rounded text-xs"></div>
-                        </div>
-                        <span class="text-white">450</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 bg-blue-600 bg-opacity-50 px-2">
-                        <span class="text-white">Salário</span>
-                        <span class="text-white">5.000</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                        <span class="text-white">Aluguel</span>
-                        <span class="text-white">1.200</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 bg-green-600 bg-opacity-50 px-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-white">Gasolina</span>
-                            <div class="w-4 h-3 bg-red-600 rounded text-xs"></div>
-                        </div>
-                        <span class="text-white">180</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 bg-green-600 bg-opacity-50 px-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-white">Farmácia</span>
-                            <div class="w-4 h-3 bg-purple-600 rounded text-xs"></div>
-                        </div>
-                        <span class="text-white">85</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 bg-purple-800 bg-opacity-70 px-2">
-                        <span class="text-white">Freelance</span>
-                        <span class="text-white">800</span>
-                    </div>
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-red-400">
-                        <span>Gastos:</span>
-                        <span>1.915</span>
-                    </div>
-                    <div class="flex justify-between text-green-400">
-                        <span>Rendas:</span>
-                        <span>5.800</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-blue-400 border-t border-gray-600 pt-1 mt-1">
-                        <span>Sobra:</span>
-                        <span>3.885</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fevereiro 2024 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Fevereiro 2024</h3>
-                        <button onclick="openModal('fev')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="h-64 overflow-y-auto">
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 bg-blue-600 bg-opacity-50 px-2">
-                        <span class="text-white">Salário</span>
-                        <span class="text-white">5.000</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 bg-gray-400 bg-opacity-50 px-2">
-                        <span class="text-white">Internet</span>
-                        <span class="text-white">120</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 bg-green-600 bg-opacity-50 px-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-white">Restaurante</span>
-                            <div class="w-4 h-3 bg-pink-600 rounded text-xs"></div>
-                        </div>
-                        <span class="text-white">95</span>
-                    </div>
-                    <div class="flex justify-between items-center text-xs py-0.5 bg-gray-400 bg-opacity-50 px-2">
-                        <span class="text-white">Academia</span>
-                        <span class="text-white">80</span>
-                    </div>
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-red-400">
-                        <span>Gastos:</span>
-                        <span>295</span>
-                    </div>
-                    <div class="flex justify-between text-green-400">
-                        <span>Rendas:</span>
-                        <span>5.000</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-blue-400 border-t border-gray-600 pt-1 mt-1">
-                        <span>Sobra:</span>
-                        <span>4.705</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Março 2024 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Março 2024</h3>
-                        <button onclick="openModal('mar')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4 space-y-2 h-64 overflow-y-auto">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-red-400">
-                        <span>Gastos:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between text-green-400">
-                        <span>Rendas:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-blue-400 border-t border-gray-600 pt-1 mt-1">
-                        <span>Sobra:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Abril 2024 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Abril 2024</h3>
-                        <button onclick="openModal('abr')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4 space-y-2 h-64 overflow-y-auto">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-red-400">
-                        <span>Gastos:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between text-green-400">
-                        <span>Rendas:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-blue-400 border-t border-gray-600 pt-1 mt-1">
-                        <span>Sobra:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Maio 2024 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Maio 2024</h3>
-                        <button onclick="openModal('mai')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4 space-y-2 h-64 overflow-y-auto">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-red-400">
-                        <span>Gastos:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between text-green-400">
-                        <span>Rendas:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-blue-400 border-t border-gray-600 pt-1 mt-1">
-                        <span>Sobra:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Junho 2024 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Junho 2024</h3>
-                        <button onclick="openModal('jun')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4 space-y-2 h-64 overflow-y-auto">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-red-400">
-                        <span>Gastos:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between text-green-400">
-                        <span>Rendas:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-blue-400 border-t border-gray-600 pt-1 mt-1">
-                        <span>Sobra:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Julho 2024 -->
-            <div class="bg-gray-800 rounded-lg border border-gray-700">
-                <div class="p-2 border-b border-gray-700">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-medium text-gray-200">Julho 2024</h3>
-                        <button onclick="openModal('jul')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
-                    </div>
-                </div>
-                <div class="p-4 space-y-2 h-64 overflow-y-auto">
-                    <!-- Vazio -->
-                </div>
-                <div class="p-4 border-t border-gray-700 text-sm">
-                    <div class="flex justify-between text-red-400">
-                        <span>Gastos:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between text-green-400">
-                        <span>Rendas:</span>
-                        <span>R$ 0</span>
-                    </div>
-                    <div class="flex justify-between font-bold text-blue-400 border-t border-gray-600 pt-1 mt-1">
-                        <span>Sobra:</span>
-                        <span>R$ 0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+            @endforeach
     </section>
 
     <!-- Tabelas de Terceiros -->
@@ -377,7 +84,7 @@
                         <button onclick="openModal('jan-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
                     </div>
                 </div>
-                <div class="h-64 overflow-y-auto">
+                <div class="">
                     <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
                         <span class="text-white">Mãe - Remédio</span>
                         <span class="text-white">120</span>
@@ -407,7 +114,7 @@
                         <button onclick="openModal('fev-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
                     </div>
                 </div>
-                <div class="h-64 overflow-y-auto">
+                <div class="">
                     <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
                         <span class="text-white">Mãe - Consulta</span>
                         <span class="text-white">150</span>
@@ -433,7 +140,7 @@
                         <button onclick="openModal('mar-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
                     </div>
                 </div>
-                <div class="p-4 h-64 overflow-y-auto">
+                <div class="p-4">
                     <!-- Vazio -->
                 </div>
                 <div class="p-4 border-t border-gray-700 text-sm">
@@ -452,7 +159,7 @@
                         <button onclick="openModal('abr-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
                     </div>
                 </div>
-                <div class="p-4 h-64 overflow-y-auto">
+                <div class="p-4">
                     <!-- Vazio -->
                 </div>
                 <div class="p-4 border-t border-gray-700 text-sm">
@@ -471,7 +178,7 @@
                         <button onclick="openModal('mai-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
                     </div>
                 </div>
-                <div class="p-4 h-64 overflow-y-auto">
+                <div class="p-4">
                     <!-- Vazio -->
                 </div>
                 <div class="p-4 border-t border-gray-700 text-sm">
@@ -490,7 +197,7 @@
                         <button onclick="openModal('jun-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
                     </div>
                 </div>
-                <div class="p-4 h-64 overflow-y-auto">
+                <div class="p-4">
                     <!-- Vazio -->
                 </div>
                 <div class="p-4 border-t border-gray-700 text-sm">
@@ -509,7 +216,7 @@
                         <button onclick="openModal('jul-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
                     </div>
                 </div>
-                <div class="p-4 h-64 overflow-y-auto">
+                <div class="p-4">
                     <!-- Vazio -->
                 </div>
                 <div class="p-4 border-t border-gray-700 text-sm">
