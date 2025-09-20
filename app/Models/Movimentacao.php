@@ -12,6 +12,10 @@ class Movimentacao extends Model
     protected $table = 'movimentacao';
     public $timestamps = false;
 
+    public function cartao() {
+        return $this->hasOne(Cartao::class, 'id', 'id_cartao');
+    }
+
     public function mes($data) {
         $this->definirValoresFixosMes($data);
 
@@ -29,6 +33,9 @@ class Movimentacao extends Model
                                         ->get(),
             'salario' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('nome', 'salario')->first()->valor
         ];
+
+        $mes['total_gastos'] = $mes['movimentacoes']->where('tipo', 'gasto')->sum('valor');
+        $mes['total_rendas'] = $mes['movimentacoes']->where('tipo', 'renda')->sum('valor');
         
         $mes['terceiros'] = $this
                                 ->whereMonth('data', $data->format('m'))
