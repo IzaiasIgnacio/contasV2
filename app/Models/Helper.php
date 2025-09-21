@@ -2,9 +2,14 @@
 namespace App\Models;
 
 class Helper {
-
-    public function format($valor) {
-        return @number_format(str_replace(",","",$valor), 2, ',', '');
+    public static function format($valor) {
+        // Verifica se o número é um inteiro ou se a parte decimal é zero
+        if ($valor == floor($valor)) {
+            return number_format($valor, 0, ',', '.');
+        }
+        
+        // Formata com 2 casas decimais se houver centavos
+        return number_format($valor, 2, ',', '.');
     }
     
     // public function getTotalSavingsAtual() {

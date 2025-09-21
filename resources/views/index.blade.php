@@ -30,156 +30,33 @@
         <!-- Tabelas de Terceiros -->
         <section class="px-4 pt-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3">
-                <!-- Janeiro 2024 - Terceiros -->
-                <div class="bg-gray-800 rounded-lg border border-gray-700">
-                    <div class="p-2 border-b border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-medium text-gray-200">Janeiro 2024</h3>
-                            <button onclick="openModal('jan-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                        </svg>
-                    </div>
-                    <div class="">
-                        <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                            <span class="text-white">Mãe - Remédio</span>
-                            <span class="text-white">120</span>
+                @foreach ($movimentacoes_mes as $mes)
+                    <div class="bg-gray-800 rounded-lg border border-gray-700">
+                        <div class="p-2 border-b border-gray-700">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-sm font-medium text-gray-200">{{$mes['mes']}} {{$mes['ano']}}</h3>
+                            </div>
                         </div>
-                        <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                            <span class="text-white">Irmão - Gasolina</span>
-                            <span class="text-white">80</span>
+                        <div class="">
+                            @forelse ($mes['terceiros'] as $terceiro)
+                                <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
+                                    <span class="text-white">{{$terceiro->nome}}</span>
+                                    <span class="text-white">{{App\Models\Helper::format($terceiro->valor)}}</span>
+                                </div>
+                            @empty
+                                <div class="p-4 text-center text-xs text-gray-400">
+                                    <span>Nenhum lançamento.</span>
+                                </div>
+                            @endforelse
                         </div>
-                        <div class="flex justify-between items-center text-xs py-0.5 px-2">
-                            <span class="text-white">Pai - Mercado</span>
-                            <span class="text-white">200</span>
-                        </div>
-                    </div>
-                    <div class="p-4 border-t border-gray-700 text-sm">
-                        <div class="flex justify-between text-purple-400">
-                            <span>Total Terceiros:</span>
-                            <span>R$ 400</span>
+                        <div class="p-2 border-t border-gray-700 text-sm">
+                            <div class="flex justify-between text-purple-400">
+                                <span>Total Terceiros:</span>
+                                <span>{{App\Models\Helper::format($mes['terceiros']->sum('valor'))}}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Fevereiro 2024 - Terceiros -->
-                <div class="bg-gray-800 rounded-lg border border-gray-700">
-                    <div class="p-2 border-b border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-medium text-gray-200">Fevereiro 2024</h3>
-                            <button onclick="openModal('fev-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                        </div>
-                    </div>
-                    <div class="">
-                        <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                            <span class="text-white">Mãe - Consulta</span>
-                            <span class="text-white">150</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs py-0.5 px-2">
-                            <span class="text-white">Sogra - Compras</span>
-                            <span class="text-white">90</span>
-                        </div>
-                    </div>
-                    <div class="p-4 border-t border-gray-700 text-sm">
-                        <div class="flex justify-between text-purple-400">
-                            <span>Total Terceiros:</span>
-                            <span>R$ 240</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Março 2024 - Terceiros -->
-                <div class="bg-gray-800 rounded-lg border border-gray-700">
-                    <div class="p-2 border-b border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-medium text-gray-200">Março 2024</h3>
-                            <button onclick="openModal('mar-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <!-- Vazio -->
-                    </div>
-                    <div class="p-4 border-t border-gray-700 text-sm">
-                        <div class="flex justify-between text-purple-400">
-                            <span>Total Terceiros:</span>
-                            <span>R$ 0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Abril 2024 - Terceiros -->
-                <div class="bg-gray-800 rounded-lg border border-gray-700">
-                    <div class="p-2 border-b border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-medium text-gray-200">Abril 2024</h3>
-                            <button onclick="openModal('abr-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <!-- Vazio -->
-                    </div>
-                    <div class="p-4 border-t border-gray-700 text-sm">
-                        <div class="flex justify-between text-purple-400">
-                            <span>Total Terceiros:</span>
-                            <span>R$ 0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Maio 2024 - Terceiros -->
-                <div class="bg-gray-800 rounded-lg border border-gray-700">
-                    <div class="p-2 border-b border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-medium text-gray-200">Maio 2024</h3>
-                            <button onclick="openModal('mai-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <!-- Vazio -->
-                    </div>
-                    <div class="p-4 border-t border-gray-700 text-sm">
-                        <div class="flex justify-between text-purple-400">
-                            <span>Total Terceiros:</span>
-                            <span>R$ 0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Junho 2024 - Terceiros -->
-                <div class="bg-gray-800 rounded-lg border border-gray-700">
-                    <div class="p-2 border-b border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-medium text-gray-200">Junho 2024</h3>
-                            <button onclick="openModal('jun-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <!-- Vazio -->
-                    </div>
-                    <div class="p-4 border-t border-gray-700 text-sm">
-                        <div class="flex justify-between text-purple-400">
-                            <span>Total Terceiros:</span>
-                            <span>R$ 0</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Julho 2024 - Terceiros -->
-                <div class="bg-gray-800 rounded-lg border border-gray-700">
-                    <div class="p-2 border-b border-gray-700">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-sm font-medium text-gray-200">Julho 2024</h3>
-                            <button onclick="openModal('jul-t')" class="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs">+</button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <!-- Vazio -->
-                    </div>
-                    <div class="p-4 border-t border-gray-700 text-sm">
-                        <div class="flex justify-between text-purple-400">
-                            <span>Total Terceiros:</span>
-                            <span>R$ 0</span>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </section>
     </main>

@@ -31,11 +31,9 @@ class Movimentacao extends Model
                                     ->orderBy('tipo')
                                     ->orderBy('posicao')
                                         ->get(),
-            'salario' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('nome', 'salario')->first()->valor
+            'salario' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('nome', 'salario')->first()->valor,
+            'novo' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('tipo', 'gasto')->where('novo', 1)->where('status', '<>', 'pago')->sum('valor')
         ];
-
-        $mes['total_gastos'] = $mes['movimentacoes']->where('tipo', 'gasto')->sum('valor');
-        $mes['total_rendas'] = $mes['movimentacoes']->where('tipo', 'renda')->sum('valor');
         
         $mes['terceiros'] = $this
                                 ->whereMonth('data', $data->format('m'))

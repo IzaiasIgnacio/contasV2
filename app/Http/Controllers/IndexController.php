@@ -26,7 +26,7 @@ class IndexController extends Controller
         }
 
         return view('index', [
-            'movimentacoes_mes' => $movimentacoes_mes,
+            'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes),
             'cartoes' => $cartoes,
             'total' => $total,
             'mes_atual' => $mes_atual,
@@ -35,44 +35,34 @@ class IndexController extends Controller
         ]);
     }
 
+    private function calculosExtrasMeses($total, $movimentacoes_mes) {
+        $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.Consolidado::where('nome', 'mes_atual')->first()->valor);
+        $cdb = 0;
+
+        foreach ($movimentacoes_mes as $i =>$mes) {
+            if ($i > 0) {
+                $cdb = $total * 0.009;
+                if ($i == 1) {
+                    if ($data->format('m') == date('m')) {
+                        $dias = 30 - date('d');
+                        $cdb = ($cdb / 30) * $dias;
+                    }
+                }
+            }
+            $movimentacoes_mes[$i]['total_gastos'] = $mes['movimentacoes']->where('tipo', 'gasto')->where('status', '<>', 'pago')->sum('valor');
+            $movimentacoes_mes[$i]['total_rendas'] = $mes['movimentacoes']->where('tipo', 'renda')->where('status', '<>', 'pago')->sum('valor') + $cdb;
+            $movimentacoes_mes[$i]['sobra'] = $mes['salario'] + $movimentacoes_mes[$i]['total_rendas'] - $movimentacoes_mes[$i]['total_gastos'];
+            $movimentacoes_mes[$i]['total'] = $total + $movimentacoes_mes[$i]['sobra'];
+            $movimentacoes_mes[$i]['cdb'] = $cdb;
+            $total += $movimentacoes_mes[$i]['sobra'];
+        }
+
+        return $movimentacoes_mes;
+    }
+
     private function getMaximoMovimentacoes(array $movimentacoes_mes): int {
         return array_reduce($movimentacoes_mes, function ($max, $mes) {
             return max($max, count($mes['movimentacoes']));
         }, 0);
-    }
-
-    private function meses() {
-        $consolidado = new Consolidado();
-        $movimentacao = new Movimentacao();
-        $helper = new Helper();
-        $meses = [];
-
-        date_default_timezone_set('America/Sao_Paulo');
-        $total_atual = Consolidado::where('totais', 1)->sum('valor');
-        $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.$consolidado->where('nome', 'mes_atual')->first()->valor);
-
-        for ($i=0;$i<=6;$i++) {
-            $renda = $movimentacao->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('tipo', 'renda')->where('status', '<>', 'pago')->sum('valor');
-            $gastos = $movimentacao->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('tipo', 'gasto')->where('status', '<>', 'pago')->sum('valor');
-            $saldo = $total_atual - $gastos + $renda;
-            $renda_cdb = $saldo * 0.009;
-
-            if ($i == 0) {
-                if ($data->format('m') == date('m')) {
-                    $dias = 30 - date('d');
-                    $renda_cdb = ($renda_cdb / 30) * $dias;
-                }
-            }
-
-            $meses[$i] = [
-                'saldo' => $helper->format($saldo),
-                'renda' => $renda_cdb
-            ];
-
-            $total_atual = $saldo + $renda_cdb;
-            $data->addMonth();
-        }
-        
-        return $meses;
     }
 }
