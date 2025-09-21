@@ -31,7 +31,8 @@ class IndexController extends Controller
             'total' => $total,
             'mes_atual' => $mes_atual,
             'ano_atual' => $ano_atual,
-            'maximo_movimentacoes' => $this->getMaximoMovimentacoes($movimentacoes_mes)
+            'maximo_movimentacoes' => $this->getMaximoMovimentacoes($movimentacoes_mes),
+            'maximo_terceiros' => $this->getMaximoTerceiros($movimentacoes_mes)
         ]);
     }
 
@@ -63,6 +64,12 @@ class IndexController extends Controller
     private function getMaximoMovimentacoes(array $movimentacoes_mes): int {
         return array_reduce($movimentacoes_mes, function ($max, $mes) {
             return max($max, count($mes['movimentacoes']));
+        }, 0);
+    }
+
+    private function getMaximoTerceiros(array $movimentacoes_mes): int {
+        return array_reduce($movimentacoes_mes, function ($max, $mes) {
+            return max($max, count($mes['terceiros']));
         }, 0);
     }
 }

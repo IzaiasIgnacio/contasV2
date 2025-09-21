@@ -31,30 +31,8 @@
         <section class="px-4 pt-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3">
                 @foreach ($movimentacoes_mes as $mes)
-                    <div class="bg-gray-800 rounded-lg border border-gray-700">
-                        <div class="p-2 border-b border-gray-700">
-                            <div class="flex justify-between items-center">
-                                <h3 class="text-sm font-medium text-gray-200">{{$mes['mes']}} {{$mes['ano']}}</h3>
-                            </div>
-                        </div>
-                        <div class="">
-                            @forelse ($mes['terceiros'] as $terceiro)
-                                <div class="flex justify-between items-center text-xs py-0.5 border-b border-gray-600 px-2">
-                                    <span class="text-white">{{$terceiro->nome}}</span>
-                                    <span class="text-white">{{App\Models\Helper::format($terceiro->valor)}}</span>
-                                </div>
-                            @empty
-                                <div class="p-4 text-center text-xs text-gray-400">
-                                    <span>Nenhum lançamento.</span>
-                                </div>
-                            @endforelse
-                        </div>
-                        <div class="p-2 border-t border-gray-700 text-sm">
-                            <div class="flex justify-between text-purple-400">
-                                <span>Total Terceiros:</span>
-                                <span>{{App\Models\Helper::format($mes['terceiros']->sum('valor'))}}</span>
-                            </div>
-                        </div>
+                    <div class="bg-gray-900 rounded-lg border border-gray-700">
+                        @include('terceiros', ['mes' => $mes])
                     </div>
                 @endforeach
             </div>
