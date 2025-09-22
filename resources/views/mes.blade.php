@@ -1,18 +1,22 @@
-<div class="p-2 border-b border-gray-700">
-    <div class="flex justify-between items-center">
-        <h3 class="text-base font-bold text-gray-200">{{$mes['mes']}}</h3>
-        <button onclick="openModal('jan')" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded text-xs">+</button>
+<div class="flex justify-between items-center border-b border-gray-500 px-2 bg-red-950">
+    <div class="flex items-center gap-1">
+        <span class="text-gray-300 text-[15px] font-bold">{{$mes['mes']}}</span>
     </div>
+    <button onclick="openModal('{{ strtolower(substr($mes['mes'], 0, 3)) }}')" class="bg-gray-300 hover:bg-gray-400 text-black rounded p-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="5" stroke="currentColor" class="w-3 h-3">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+    </button>
 </div>
 <div>
-    <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-blue-800">
+    <div class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 bg-blue-800">
         <div class="flex items-center gap-1">
-            <span class="text-gray-300 text-base font-semibold">Salário</span>
+            <span class="text-gray-300 text-[15px] ">Salário</span>
         </div>
-        <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['salario'])}}</span>
+        <span class="text-gray-300 text-[15px] ">{{App\Models\Helper::format($mes['salario'])}}</span>
     </div>
     @foreach ($mes['movimentacoes'] as $movimentacao)
-    <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2
+    <div class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2
     @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'pago') bg-green-900 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'pago') bg-blue-600 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'definido') bg-blue-800 @endif
@@ -20,7 +24,7 @@
     @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'planejado') bg-gray-600 @endif
     ">
         <div class="flex items-center gap-1">
-            <span class="text-gray-300 text-base font-semibold">{{$movimentacao->nome}}</span>
+            <span class="text-gray-300 text-[15px] ">{{$movimentacao->nome}}</span>
             @if (!empty($movimentacao->cartao->cor))<div class="w-4 h-3 bg-{{$movimentacao->cartao->cor}} rounded text-xs border border-white/20"></div>@endif
             @if (($movimentacao->novo))
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
@@ -28,12 +32,12 @@
                 </svg>
             @endif
         </div>
-        <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($movimentacao->valor)}}</span>
+        <span class="text-gray-300 text-[15px] ">{{App\Models\Helper::format($movimentacao->valor)}}</span>
     </div>
     @endforeach
     @for ($i = count($mes['movimentacoes']); $i < $maximo_movimentacoes; $i++)
-    <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2">
-        <span class="text-gray-300 text-base font-semibold">&nbsp;</span>
+    <div class="flex justify-between items-center border-b border-gray-500 px-2">
+        <span class="text-gray-300 text-[15px]">&nbsp;</span>
     </div>
     @endfor
 </div>
@@ -42,39 +46,39 @@
 
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-red-800">
     <div class="flex items-center gap-1">
-        <span class="text-gray-300 text-base font-semibold">Gastos</span>
+        <span class="text-gray-300 text-[15px] font-semibold">Gastos</span>
     </div>
-    <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['total_gastos'])}}</span>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['total_gastos'])}}</span>
 </div>
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-red-800">
     <div class="flex items-center gap-1">
-        <span class="text-gray-300 text-base font-semibold">Novo</span>
+        <span class="text-gray-300 text-[15px] font-semibold">Novo</span>
     </div>
-    <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['novo'])}}</span>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['novo'])}}</span>
 </div>
 @isset($mes['cdb'])
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-green-800">
     <div class="flex items-center gap-1">
-        <span class="text-gray-300 text-base font-semibold">cdb</span>
+        <span class="text-gray-300 text-[15px] font-semibold">cdb</span>
     </div>
-    <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['cdb'])}}</span>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['cdb'])}}</span>
 </div>
 @endisset
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-green-800">
     <div class="flex items-center gap-1">
-        <span class="text-gray-300 text-base font-semibold">Renda</span>
+        <span class="text-gray-300 text-[15px] font-semibold">Renda</span>
     </div>
-    <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['salario'] + $mes['total_rendas'])}}</span>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['salario'] + $mes['total_rendas'])}}</span>
 </div>
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-blue-800">
     <div class="flex items-center gap-1">
-        <span class="text-gray-300 text-base font-semibold">Sobra</span>
+        <span class="text-gray-300 text-[15px] font-semibold">Sobra</span>
     </div>
-    <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['sobra'])}}</span>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['sobra'])}}</span>
 </div>
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-blue-800">
     <div class="flex items-center gap-1">
-        <span class="text-gray-300 text-base font-semibold">Total</span>
+        <span class="text-gray-300 text-[15px] font-semibold">Total</span>
     </div>
-    <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['total'])}}</span>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['total'])}}</span>
 </div>

@@ -8,16 +8,23 @@
     <script>
         tailwind.config = {
             darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+                    },
+                },
+            },
         }
     </script>
 </head>
-<body class="bg-black text-white min-h-screen flex">
+<body class="bg-black text-white min-h-screen flex font-sans">
     @include('navegacao', ['total' => $total, 'cartoes' => $cartoes])
 
     <!-- Conteúdo Principal -->
     <main class="flex-1 overflow-y-auto">
         <!-- Tabelas de Meses -->
-        <section class="px-4 pt-4">
+        <section class="px-2 pt-2">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3">
                 @foreach ($movimentacoes_mes as $mes)
                     <div class="bg-gray-900 rounded-lg border border-gray-700">
@@ -313,6 +320,12 @@
         document.getElementById('bankModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeBankModal();
+            }
+        });
+
+        document.getElementById('dateModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDateModal();
             }
         });
     </script>

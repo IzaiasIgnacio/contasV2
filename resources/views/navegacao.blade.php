@@ -1,7 +1,7 @@
 <!-- Barra Lateral Esquerda -->
-<aside class="w-54 bg-black border-r border-gray-700 p-4 flex flex-col gap-4">
+<aside class="w-54 bg-black border-r border-gray-700 p-2 flex flex-col gap-4">
     <!-- Mês e Total -->
-    <div class="flex flex-col items-start gap-4">
+    <div class="flex flex-col items-start p-2 gap-4">
         <div class="flex items-center gap-3">
             <button onclick="openDateModal()" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -43,6 +43,7 @@
                 <span class="text-sm font-bold [text-shadow:0_1px_2px_rgba(0,0,0,1)]">{{$cartao->rotulo}}</span>
             </div>
             <p class="text-sm [text-shadow:0_1px_2px_rgba(0,0,0,1)]">5000 / 3200</p>
+            <p class="text-sm [text-shadow:0_1px_2px_rgba(0,0,0,1)]">5230</p>
             <p class="text-sm [text-shadow:0_1px_2px_rgba(0,0,0,1)]">15/01 / 16/01</p>
         </div>
        @endforeach
