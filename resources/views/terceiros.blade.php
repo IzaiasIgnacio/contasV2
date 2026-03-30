@@ -1,20 +1,23 @@
 <div>
     @forelse ($mes['terceiros'] as $terceiro)
-        <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2">
-            <span class="text-gray-300 text-base font-semibold">{{$terceiro->nome}} ({{$terceiro->responsavel}})</span>
-            <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($terceiro->valor)}}</span>
+        <div class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2  bg-gray-900">
+            <div class="flex items-center gap-1">
+                <span class="text-gray-300 text-[15px]">{{$terceiro->nome}} ({{$terceiro->responsavel}})</span>
+                @if (!empty($terceiro->cartao->cor))<div class="w-4 h-3 bg-{{$terceiro->cartao->cor}} rounded text-xs border border-white/50"></div>@endif
+            </div>
+            <span class="text-gray-300 text-[15px]">{{App\Models\Helper::format($terceiro->valor)}}</span>
         </div>
     @empty
         <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2">
             <span class="text-gray-400 text-xs italic">Nenhum lançamento.</span>
         </div>
     @endforelse
-    @for ($i = count($mes['terceiros']); $i < $maximo_terceiros; $i++)
-    <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2">
-        <span class="text-gray-300 text-base font-semibold">&nbsp;</span>
-    </div>
-    @endfor
 </div>
+@for ($i = count($mes['terceiros']); $i < $maximo_terceiros; $i++)
+<div class="flex justify-between items-center text-sm border-b border-gray-500 px-2">
+    <span class="text-gray-300 text-base font-semibold">&nbsp;</span>
+</div>
+@endfor
 
 <div class="p-2"></div>
 

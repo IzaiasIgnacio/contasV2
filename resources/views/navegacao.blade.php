@@ -40,11 +40,20 @@
        @foreach ($cartoes as $cartao)
         <div class="bg-{{$cartao->cor}} rounded-lg p-2 text-white w-full border border-gray-600">
             <div class="flex justify-end mb-1">
-                <span class="text-sm font-bold [text-shadow:0_1px_2px_rgba(0,0,0,1)]">{{$cartao->rotulo}}</span>
+                <span class="text-[14px] font-bold [text-shadow:0_2px_4px_rgba(0,0,0,1)]">{{$cartao->rotulo}}</span>
             </div>
-            <p class="text-sm [text-shadow:0_1px_2px_rgba(0,0,0,1)]">5000 / 3200</p>
-            <p class="text-sm [text-shadow:0_1px_2px_rgba(0,0,0,1)]">5230</p>
-            <p class="text-sm [text-shadow:0_1px_2px_rgba(0,0,0,1)]">15/01 / 16/01</p>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path></svg>
+                <p class="text-[14px] [text-shadow:0_2px_4px_rgba(0,0,0,1)]">{{App\Models\Helper::format($cartao->limite_atual)}} | {{App\Models\Helper::format($cartao->credito)}}</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <p class="text-[14px] [text-shadow:0_2px_4px_rgba(0,0,0,1)]">{{App\Models\Helper::format($cartao->proxima_fatura)}} | {{App\Models\Helper::format($cartao->fatura_seguinte)}}</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <p class="text-[14px] [text-shadow:0_2px_4px_rgba(0,0,0,1)]">{{App\Models\Helper::format($cartao->vencimento)}} | {{App\Models\Helper::data_fechamento($cartao->vencimento, $cartao->dias_fechamento)}}</p>
+            </div>
         </div>
        @endforeach
     </div>
