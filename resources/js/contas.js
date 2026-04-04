@@ -1,5 +1,82 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('movimentacaoForm').reset();
+
+    // Inicializar variáveis globais e event listeners
+    window.currentMovimentacaoId = null;
+    window.currentMovimentacaoElement = null;
+    window.currentMovimentacaoType = null;
+
+    // Inicializar menu de contexto
+    const statusContextMenu = document.getElementById('statusContextMenu');
+
+    // Event listener for right-click on movimentacao lines
+    document.addEventListener('contextmenu', function(event) {
+        const target = event.target.closest('.linha_movimentacao');
+        if (target) {
+            event.preventDefault(); // Prevent default browser context menu
+            window.currentMovimentacaoId = String(target.getAttribute('data-movimentacao-id'));
+            window.currentMovimentacaoElement = target;
+            window.currentMovimentacaoType = String(target.getAttribute('data-movimentacao-type'));
+
+            // Adjust menu position to stay within viewport
+            let x = event.clientX;
+            let y = event.clientY;
+            const menuWidth = statusContextMenu.offsetWidth;
+            const menuHeight = statusContextMenu.offsetHeight;
+
+            if (x + menuWidth > window.innerWidth) {
+                x = window.innerWidth - menuWidth - 5; // 5px padding from edge
+            }
+            if (y + menuHeight > window.innerHeight) {
+                y = window.innerHeight - menuHeight - 5; // 5px padding from edge
+            }
+
+            showContextMenu(x, y);
+        } else {
+            hideContextMenu(); // Hide if right-clicked elsewhere
+        }
+    });
+
+    // Event listener for clicks outside the context menu to hide it
+    document.addEventListener('click', function(event) {
+        if (statusContextMenu && !statusContextMenu.contains(event.target)) {
+            hideContextMenu();
+        }
+    });
+
+    // Fechar modais ao clicar fora
+    const transactionModal = document.getElementById('transactionModal');
+    if (transactionModal) {
+        transactionModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    }
+
+    const bankModal = document.getElementById('bankModal');
+    if (bankModal) {
+        bankModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBankModal();
+            }
+        });
+    }
+
+    const dateModal = document.getElementById('dateModal');
+    if (dateModal) {
+        dateModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDateModal();
+            }
+        });
+    }
+
+    // Oculta o menu ao rolar a tela principal
+    const mainContent = document.querySelector('main');
+    if (mainContent && statusContextMenu) {
+        mainContent.addEventListener('scroll', () => statusContextMenu.classList.add('hidden'));
+    }
 });
 
 function openModal(mes, ano) {
@@ -68,79 +145,121 @@ function updateDate() {
 }
 
 // Lógica do Menu de Contexto
-const statusContextMenu = document.getElementById('statusContextMenu');
 
 // Function to show the context menu
 function showContextMenu(x, y) {
-    statusContextMenu.style.left = `${x}px`;
-    statusContextMenu.style.top = `${y}px`;
-    statusContextMenu.classList.remove('hidden');
+    const statusContextMenu = document.getElementById('statusContextMenu');
+    if (statusContextMenu) {
+        statusContextMenu.style.left = `${x}px`;
+        statusContextMenu.style.top = `${y}px`;
+        statusContextMenu.classList.remove('hidden');
+    }
 }
 
 // Function to hide the context menu
 function hideContextMenu() {
-    statusContextMenu.classList.add('hidden');
-    currentMovimentacaoId = null;
-    currentMovimentacaoElement = null;
-    currentMovimentacaoType = null;
+    const statusContextMenu = document.getElementById('statusContextMenu');
+    if (statusContextMenu) {
+        statusContextMenu.classList.add('hidden');
+    }
+    window.currentMovimentacaoId = null;
+    window.currentMovimentacaoElement = null;
+    window.currentMovimentacaoType = null;
 }
 
-// Event listener for right-click on movimentacao lines
-document.addEventListener('contextmenu', function(event) {
-    const target = event.target.closest('.linha_movimentacao');
-    if (target) {
-        event.preventDefault(); // Prevent default browser context menu
-        currentMovimentacaoId = target.dataset.movimentacaoId;
-        currentMovimentacaoElement = target;
-        currentMovimentacaoType = target.dataset.movimentacaoType;
-
-        // Adjust menu position to stay within viewport
-        let x = event.clientX;
-        let y = event.clientY;
-        const menuWidth = statusContextMenu.offsetWidth;
-        const menuHeight = statusContextMenu.offsetHeight;
-
-        if (x + menuWidth > window.innerWidth) {
-            x = window.innerWidth - menuWidth - 5; // 5px padding from edge
-        }
-        if (y + menuHeight > window.innerHeight) {
-            y = window.innerHeight - menuHeight - 5; // 5px padding from edge
-        }
-
-        showContextMenu(x, y);
-    } else {
-        hideContextMenu(); // Hide if right-clicked elsewhere
+function setStatus(status) {
+    if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
+        console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);
+        return;
     }
-});
 
-// Event listener for clicks outside the context menu to hide it
-document.addEventListener('click', function(event) {
-    if (!statusContextMenu.contains(event.target)) {
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!token) {
+        console.error('CSRF token not found');
+        return;
+    }
+
+    // Construir URL para localhost (sempre com index.php)
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/movimentacao/${window.currentMovimentacaoId}/status`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ status })
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Falha ao atualizar status');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.success) {
+            // recarregar para recalcular e atualizar visual
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível atualizar o status.'));
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('Erro ao atualizar status da movimentação. Tente novamente.');
+    })
+    .finally(() => {
         hideContextMenu();
-    }
-});
+    });
+}
 
-// Fechar modais ao clicar fora
-document.getElementById('transactionModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeModal();
+function deleteMovimentacao() {
+    if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
+        console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);
+        return;
     }
-});
 
-document.getElementById('bankModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeBankModal();
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!token) {
+        console.error('CSRF token not found');
+        return;
     }
-});
 
-document.getElementById('dateModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeDateModal();
-    }
-});
+    // Construir URL para localhost (sempre com index.php)
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/movimentacao/${window.currentMovimentacaoId}`;
 
-// Oculta o menu ao rolar a tela principal, para evitar que o menu fique "flutuando"
-const mainContent = document.querySelector('main');
-if (mainContent) {
-    mainContent.addEventListener('scroll', () => statusContextMenu.classList.add('hidden'));
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Falha ao excluir movimentação');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.success) {
+            // recarregar para atualizar a visualização
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível excluir a movimentação.'));
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('Erro ao excluir a movimentação. Tente novamente.');
+    })
+    .finally(() => {
+        hideContextMenu();
+    });
 }

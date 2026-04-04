@@ -21,6 +21,13 @@
 
 <div class="p-2"></div>
 
+@foreach ($mes['total_terceiros'] as $responsavel => $valor)
+<div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-purple-800">
+    <span class="text-gray-300 text-base font-semibold">{{ ucfirst($responsavel) }}</span>
+    <span class="text-gray-300 text-base font-semibold">{{ App\Models\Helper::format($valor) }}</span>
+</div>
+@endforeach
+
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-purple-800">
     <span class="text-gray-300 text-base font-semibold">Total</span>
     <span class="text-gray-300 text-base font-semibold">{{App\Models\Helper::format($mes['terceiros']->sum('valor'))}}</span>

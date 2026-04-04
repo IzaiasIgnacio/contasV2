@@ -107,4 +107,43 @@ class IndexController extends Controller
             return max($max, count($mes['terceiros']));
         }, 0);
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $status = $request->input('status');
+        $statuses = ['planejado', 'definido', 'pago'];
+
+        if (!in_array($status, $statuses)) {
+            return response()->json(['error' => 'Status inválido'], 422);
+        }
+
+        $movimentacao = Movimentacao::find($id);
+
+        if (!$movimentacao) {
+            return response()->json(['error' => 'Movimentação não encontrada'], 404);
+        }
+
+        $movimentacao->status = $status;
+        $movimentacao->save();
+
+        return response()->json(['success' => true, 'status' => $status]);
+    }
+
+    public function deleteMovimentacao($id)
+    {
+        $movimentacao = Movimentacao::find($id);
+
+        if (!$movimentacao) {
+            return response()->json(['error' => 'Movimentação não encontrada'], 404);
+        }
+
+        // Se a movimentação tem parcelas, excluir todas as parcelas relacionadas
+        if (!empty($movimentacao->id_parcela)) {
+            Movimentacao::where('id_parcela', $movimentacao->id_parcela)->delete();
+        } else {
+            $movimentacao->delete();
+        }
+
+        return response()->json(['success' => true]);
+    }
 }

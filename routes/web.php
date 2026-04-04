@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::any('/', [IndexController::class, 'index']);
+Route::post('/movimentacao/{id}/status', [App\Http\Controllers\MovimentacaoController::class, 'updateStatus']);
+Route::delete('/movimentacao/{id}', [App\Http\Controllers\MovimentacaoController::class, 'deleteMovimentacao']);
 
 Route::get('/teste', function () {
     return view('teste');

@@ -20,7 +20,7 @@
         <span class="text-gray-300 text-[15px] ">{{App\Models\Helper::format($mes['salario'])}}</span>
     </div>
     @foreach ($mes['movimentacoes'] as $movimentacao)
-    <div class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
+    <div data-movimentacao-id="{{ $movimentacao->id }}" data-movimentacao-type="{{ $movimentacao->tipo }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
     @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'pago') bg-green-900 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'pago') bg-blue-600 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'definido') bg-blue-800 @endif

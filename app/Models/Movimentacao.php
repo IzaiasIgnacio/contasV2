@@ -51,6 +51,13 @@ class Movimentacao extends Model
                                     ->orderBy('tipo')
                                     ->orderBy('posicao')
                                         ->get();
+
+        $mes['total_terceiros'] = $mes['terceiros']
+            ->groupBy('responsavel')
+            ->mapWithKeys(function ($items, $responsavel) {
+                return [$responsavel => $items->sum('valor')];
+            })
+            ->toArray();
         
         return $mes;
     }

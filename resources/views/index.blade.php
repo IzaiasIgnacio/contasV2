@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>ContasV2</title>
     <link rel="shortcut icon" href="{{URL::asset('public/favicon.ico')}}">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -146,7 +147,7 @@
     <div id="bankModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
         <div class="bg-gray-800 rounded-lg border border-gray-700 p-4 w-full max-w-lg">
             <div class="flex justify-between items-center mb-3">
-                <h2 class="text-lg font-semibold text-white">Contas Bancárias</h2>
+                <h2 class="text-lg font-semibold text-white">Contas</h2>
                 <button onclick="closeBankModal()" class="text-gray-400 hover:text-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -155,45 +156,52 @@
             </div>
 
             <div class="space-y-4 max-h-96 overflow-y-auto">
-                <!-- Banco do Brasil -->
+                <!-- Nubank -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center text-black font-bold text-xs">BB</div>
-                    <span class="text-white text-sm flex-1">Banco do Brasil</span>
+                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">NU</div>
+                    <span class="text-white text-sm flex-1">Nubank ({{ now()->format('d/m/Y H:i') }})</span>
+                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                </div>
+
+                <!-- Caixinha -->
+                <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
+                    <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-black font-bold text-xs">CX</div>
+                    <span class="text-white text-sm flex-1">Caixinha ({{ now()->format('d/m/Y H:i') }})</span>
+                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                </div>
+
+                <!-- Caixinha2 -->
+                <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
+                    <div class="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center text-black font-bold text-xs">C2</div>
+                    <span class="text-white text-sm flex-1">Caixinha2 ({{ now()->format('d/m/Y H:i') }})</span>
                     <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
                 <!-- Itaú -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
                     <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">IT</div>
-                    <span class="text-white text-sm flex-1">Itaú</span>
+                    <span class="text-white text-sm flex-1">Itaú ({{ now()->format('d/m/Y H:i') }})</span>
                     <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
-                <!-- Bradesco -->
+                <!-- Mercado Pago -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">BR</div>
-                    <span class="text-white text-sm flex-1">Bradesco</span>
+                    <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">MP</div>
+                    <span class="text-white text-sm flex-1">Mercado Pago ({{ now()->format('d/m/Y H:i') }})</span>
                     <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
-                <!-- Santander -->
+                <!-- Cofrinho -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">ST</div>
-                    <span class="text-white text-sm flex-1">Santander</span>
+                    <div class="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">CF</div>
+                    <span class="text-white text-sm flex-1">Cofrinho ({{ now()->format('d/m/Y H:i') }})</span>
                     <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
-                <!-- Nubank -->
+                <!-- Casa -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">NU</div>
-                    <span class="text-white text-sm flex-1">Nubank</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
-                </div>
-
-                <!-- Inter -->
-                <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">IN</div>
-                    <span class="text-white text-sm flex-1">Inter</span>
+                    <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">CS</div>
+                    <span class="text-white text-sm flex-1">Casa ({{ now()->format('d/m/Y H:i') }})</span>
                     <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
             </div>
@@ -254,20 +262,20 @@
     <!-- Menu de Contexto -->
     <div id="statusContextMenu" class="fixed hidden z-50 w-48 bg-black border border-gray-700 rounded-md shadow-lg py-1 text-sm text-gray-300">
         <ul>
-            <li class="px-3 py-1 hover:bg-gray-700 hover:text-white cursor-pointer transition-colors flex items-center">
+            <li onclick="setStatus('planejado')" class="px-3 py-1 hover:bg-gray-700 hover:text-white cursor-pointer transition-colors flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" />
                 </svg>
                 Planejado
             </li>
-            <li class="px-3 py-1 hover:bg-gray-700 hover:text-white cursor-pointer transition-colors flex items-center">
+            <li onclick="setStatus('definido')" class="px-3 py-1 hover:bg-gray-700 hover:text-white cursor-pointer transition-colors flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 12.75 1.5 1.5 3-3" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 7.5A2.25 2.25 0 0 1 7.5 5.25h9a2.25 2.25 0 0 1 2.25 2.25v9a2.25 2.25 0 0 1-2.25 2.25h-9a2.25 2.25 0 0 1-2.25-2.25v-9Z" />
                 </svg>
                 Definido
             </li>
-            <li class="px-3 py-1 hover:bg-gray-700 hover:text-white cursor-pointer transition-colors flex items-center">
+            <li onclick="setStatus('pago')" class="px-3 py-1 hover:bg-gray-700 hover:text-white cursor-pointer transition-colors flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-3">
                     <path fill-rule="evenodd" d="M2.25 6.75c0-1.036.84-1.875 1.875-1.875h15.75c1.036 0 1.875.84 1.875 1.875v10.5c0 1.036-.84 1.875-1.875 1.875H4.125c-1.036 0-1.875-.84-1.875-1.875V6.75Zm8.25 9.75a.75.75 0 0 0 1.06 0l4.5-4.5a.75.75 0 0 0-1.06-1.06L11.25 14.44l-2.47-2.47a.75.75 0 0 0-1.06 1.06l3 3Z" clip-rule="evenodd" />
                 </svg>
@@ -336,7 +344,7 @@
             <li class="my-1">
                 <hr class="border-gray-600">
             </li>
-            <li class="px-3 py-1 hover:bg-red-500 hover:text-white cursor-pointer transition-colors flex items-center">
+            <li onclick="deleteMovimentacao()" class="px-3 py-1 hover:bg-red-500 hover:text-white cursor-pointer transition-colors flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-3">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.134-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.067-2.09.92-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                 </svg>
