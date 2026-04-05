@@ -21,7 +21,7 @@
     </script>
 </head>
 <body class="bg-gray-700 text-white min-h-screen flex font-sans">
-    @include('navegacao', ['total' => $total, 'cartoes' => $cartoes])
+    @include('navegacao', ['total' => $total, 'cartoes' => $cartoes, 'total_nb' => $total_nb, 'total_itau' => $total_itau, 'diferenca_nb' => $diferenca_nb, 'diferenca_itau' => $diferenca_itau])
 
     <!-- Conteúdo Principal -->
     <main class="flex-1 overflow-y-auto">

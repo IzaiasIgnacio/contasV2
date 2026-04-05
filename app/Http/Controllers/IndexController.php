@@ -58,6 +58,18 @@ class IndexController extends Controller
             $data->addMonth();
         }
 
+        // Calcular somas de nb e itau
+        $total_nb = $movimentacao->where('nb', true)->sum('valor');
+        $total_itau = $movimentacao->where('itau', true)->sum('valor');
+
+        // Buscar valores atuais das contas
+        $valor_conta_itau = Consolidado::where('nome', 'itau')->first()->valor ?? 0;
+        $valor_conta_nb = Consolidado::where('nome', 'nubank')->first()->valor ?? 0;
+
+        // Calcular diferenças (total movimentações - valor atual na conta)
+        $diferenca_itau = $total_itau - $valor_conta_itau;
+        $diferenca_nb = $total_nb - $valor_conta_nb;
+
         return view('index', [
             'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes),
             'terceiros' => $terceiros->listar(),
@@ -65,6 +77,10 @@ class IndexController extends Controller
             'total' => $total,
             'mes_atual' => $mes_atual,
             'ano_atual' => $ano_atual,
+            'total_nb' => $total_nb,
+            'total_itau' => $total_itau,
+            'diferenca_nb' => $diferenca_nb,
+            'diferenca_itau' => $diferenca_itau,
             'maximo_movimentacoes' => $this->getMaximoMovimentacoes($movimentacoes_mes),
             'maximo_terceiros' => $this->getMaximoTerceiros($movimentacoes_mes)
         ]);
