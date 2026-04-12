@@ -20,7 +20,7 @@
         }
     </script>
 </head>
-<body class="bg-gray-700 text-white min-h-screen flex font-sans">
+<body class="bg-gray-700 text-white min-h-screen flex font-sans pl-48 md:pl-54">
     @include('navegacao', ['total' => $total, 'cartoes' => $cartoes, 'total_nb' => $total_nb, 'total_itau' => $total_itau, 'diferenca_nb' => $diferenca_nb, 'diferenca_itau' => $diferenca_itau])
 
     <!-- Conteúdo Principal -->

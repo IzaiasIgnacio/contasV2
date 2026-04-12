@@ -1,5 +1,5 @@
 <!-- Barra Lateral Esquerda -->
-<aside class="w-54 bg-black border-r border-gray-700 p-2 flex flex-col gap-4">
+<aside class="fixed top-0 left-0 h-screen w-48 md:w-54 bg-black border-r border-gray-700 p-2 flex flex-col gap-4 overflow-y-auto z-10">
     <!-- Mês e Total -->
     <div class="flex flex-col items-start p-2 gap-4">
         <div class="flex items-center gap-3">
@@ -22,13 +22,13 @@
         @if(($total_nb ?? 0) > 0)
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center justify-center w-6 h-6 bg-purple-600 text-white text-xs font-bold rounded">N</span>
-                <p class="text-xl lg:text-2xl text-white-400">{{App\Models\Helper::format($total_nb ?? 0)}} <span class="text-sm text-gray-400">({{($diferenca_nb ?? 0) > 0 ? '+' : ''}}{{App\Models\Helper::format($diferenca_nb ?? 0)}})</span></p>
+                <p class="text-l text-white-400">{{App\Models\Helper::format($total_nb ?? 0)}} <span class="text-sm text-gray-400">({{($diferenca_nb ?? 0) < 0 ? '+' : ''}}{{App\Models\Helper::format($diferenca_nb ?? 0)}})</span></p>
             </div>
         @endif
         @if(($total_itau ?? 0) > 0)
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center justify-center w-6 h-6 bg-orange-500 text-white text-xs font-bold rounded">I</span>
-                <p class="text-xl lg:text-2xl text-white-400">{{App\Models\Helper::format($total_itau ?? 0)}} <span class="text-sm text-gray-400">({{($diferenca_itau ?? 0) > 0 ? '+' : ''}}{{App\Models\Helper::format($diferenca_itau ?? 0)}})</span></p>
+                <p class="text-l  text-white-400">{{App\Models\Helper::format($total_itau ?? 0)}} <span class="text-sm text-gray-400">({{($diferenca_itau ?? 0) < 0 ? '+' : ''}}{{App\Models\Helper::format($diferenca_itau ?? 0)}})</span></p>
             </div>
         @endif
     </div>
