@@ -18,6 +18,8 @@ Route::any('/', [IndexController::class, 'index']);
 Route::post('/movimentacao/{id}/status', [App\Http\Controllers\MovimentacaoController::class, 'updateStatus']);
 Route::delete('/movimentacao/{id}', [App\Http\Controllers\MovimentacaoController::class, 'deleteMovimentacao']);
 
+Route::get('/notion', [App\Http\Controllers\MovimentacaoController::class, 'notion']);
+
 Route::get('/teste', function () {
     return view('teste');
 });

@@ -15,7 +15,6 @@ class IndexController extends Controller
         if ($request->isMethod('post')) {
             $id_parcela = time();
             $data = Carbon::createFromFormat('d/m/Y', $request->data);
-            $nome = $request->nome;
             
             for ($parcela=1;$parcela<=$request->parcelas;$parcela++) {
                 $movimentacao = new Movimentacao();
