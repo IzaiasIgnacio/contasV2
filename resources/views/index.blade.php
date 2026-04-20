@@ -159,50 +159,50 @@
                 <!-- Nubank -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
                     <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">NU</div>
-                    <span class="text-white text-sm flex-1">Nubank ({{ now()->format('d/m/Y H:i') }})</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                    <span class="text-white text-sm flex-1">Nubank ({{ $valor_contas['nubank']->data_atualizacao }})</span>
+                    <input value="{{$valor_contas['nubank']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
                 <!-- Caixinha -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-black font-bold text-xs">CX</div>
-                    <span class="text-white text-sm flex-1">Caixinha ({{ now()->format('d/m/Y H:i') }})</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">CX</div>
+                    <span class="text-white text-sm flex-1">Caixinha ({{ $valor_contas['caixinha']->data_atualizacao }})</span>
+                    <input value="{{$valor_contas['caixinha']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
                 <!-- Caixinha2 -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center text-black font-bold text-xs">C2</div>
-                    <span class="text-white text-sm flex-1">Caixinha2 ({{ now()->format('d/m/Y H:i') }})</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">C2</div>
+                    <span class="text-white text-sm flex-1">Caixinha2 ({{ $valor_contas['caixinha2']->data_atualizacao}})</span>
+                    <input value="{{$valor_contas['caixinha2']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
                 <!-- Itaú -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
                     <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">IT</div>
-                    <span class="text-white text-sm flex-1">Itaú ({{ now()->format('d/m/Y H:i') }})</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                    <span class="text-white text-sm flex-1">Itaú ({{ $valor_contas['itau']->data_atualizacao }})</span>
+                    <input value="{{$valor_contas['itau']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
                 <!-- Mercado Pago -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">MP</div>
-                    <span class="text-white text-sm flex-1">Mercado Pago ({{ now()->format('d/m/Y H:i') }})</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">MP</div>
+                    <span class="text-white text-sm flex-1">Mercado Pago ({{ $valor_contas['mercado_pago']->data_atualizacao }})</span>
+                    <input value="{{$valor_contas['mercado_pago']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
                 <!-- Cofrinho -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
-                    <div class="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">CF</div>
-                    <span class="text-white text-sm flex-1">Cofrinho ({{ now()->format('d/m/Y H:i') }})</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">CF</div>
+                    <span class="text-white text-sm flex-1">Cofrinho ({{ $valor_contas['cofrinho']->data_atualizacao }})</span>
+                    <input value="{{$valor_contas['cofrinho']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
 
                 <!-- Casa -->
                 <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
                     <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">CS</div>
-                    <span class="text-white text-sm flex-1">Casa ({{ now()->format('d/m/Y H:i') }})</span>
-                    <input type="number" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+                    <span class="text-white text-sm flex-1">Casa ({{ $valor_contas['casa']->data_atualizacao }})</span>
+                    <input value="{{$valor_contas['casa']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
                 </div>
             </div>
 

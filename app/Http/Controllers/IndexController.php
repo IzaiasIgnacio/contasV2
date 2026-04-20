@@ -62,12 +62,20 @@ class IndexController extends Controller
         $total_itau = $movimentacao->where('itau', true)->sum('valor');
 
         // Buscar valores atuais das contas
-        $valor_conta_itau = Consolidado::where('nome', 'itau')->first()->valor ?? 0;
-        $valor_conta_nb = Consolidado::where('nome', 'nubank')->first()->valor ?? 0;
+        $valor_contas = [
+            'itau' => Consolidado::where('nome', 'itau')->first() ?? 0,
+            'nubank' => Consolidado::where('nome', 'nubank')->first() ?? 0,
+            'cofrinho' => Consolidado::where('nome', 'cofrinho')->first() ?? 0,
+            'casa' => Consolidado::where('nome', 'casa')->first() ?? 0,
+            'mercado_pago' => Consolidado::where('nome', 'mp')->first() ?? 0,
+            'caixinha2' => Consolidado::where('nome', 'caixinha2')->first() ?? 0,
+            'caixinha' => Consolidado::where('nome', 'caixinha')->first() ?? 0
+        ];
+        
 
         // Calcular diferenças (total movimentações - valor atual na conta)
-        $diferenca_itau = $total_itau - $valor_conta_itau;
-        $diferenca_nb = $total_nb - $valor_conta_nb;
+        $diferenca_itau = $total_itau - $valor_contas['itau']->valor;
+        $diferenca_nb = $total_nb - $valor_contas['nubank']->valor;
 
         return view('index', [
             'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes),
@@ -80,6 +88,7 @@ class IndexController extends Controller
             'total_itau' => $total_itau,
             'diferenca_nb' => $diferenca_nb,
             'diferenca_itau' => $diferenca_itau,
+            'valor_contas' => $valor_contas,
             'maximo_movimentacoes' => $this->getMaximoMovimentacoes($movimentacoes_mes),
             'maximo_terceiros' => $this->getMaximoTerceiros($movimentacoes_mes)
         ]);

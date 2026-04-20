@@ -79,7 +79,7 @@
     <div class="flex items-center gap-1">
         <span class="text-gray-300 text-[15px] font-semibold">Renda</span>
     </div>
-    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['salario'] + $mes['total_rendas'])}}</span>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format(($mes['status_salario'] <> 'pago' ? $mes['salario'] : 0) + $mes['total_rendas'])}}</span>
 </div>
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-blue-800">
     <div class="flex items-center gap-1">
