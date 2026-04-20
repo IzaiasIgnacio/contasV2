@@ -216,6 +216,149 @@ function setStatus(status) {
     });
 }
 
+function setCartao(cartaoId) {
+    if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
+        console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);
+        return;
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!token) {
+        console.error('CSRF token not found');
+        return;
+    }
+
+    // Construir URL para localhost (sempre com index.php)
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/movimentacao/${window.currentMovimentacaoId}/cartao`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ cartao_id: cartaoId })
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Falha ao atualizar cartão');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.success) {
+            // recarregar para recalcular e atualizar visual
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível atualizar o cartão.'));
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('Erro ao atualizar cartão da movimentação. Tente novamente.');
+    })
+    .finally(() => {
+        hideContextMenu();
+    });
+}
+
+function setItau() {
+    if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
+        console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);
+        return;
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!token) {
+        console.error('CSRF token not found');
+        return;
+    }
+
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/movimentacao/${window.currentMovimentacaoId}/itau`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Falha ao atualizar itau');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível atualizar itau.'));
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('Erro ao atualizar itau da movimentação. Tente novamente.');
+    })
+    .finally(() => {
+        hideContextMenu();
+    });
+}
+
+function setNb() {
+    if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
+        console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);
+        return;
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!token) {
+        console.error('CSRF token not found');
+        return;
+    }
+
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/movimentacao/${window.currentMovimentacaoId}/nb`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({})
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Falha ao atualizar nb');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível atualizar nb.'));
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('Erro ao atualizar nb da movimentação. Tente novamente.');
+    })
+    .finally(() => {
+        hideContextMenu();
+    });
+}
+
 function deleteMovimentacao() {
     if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
         console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);

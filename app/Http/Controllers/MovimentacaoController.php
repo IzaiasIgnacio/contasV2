@@ -30,6 +30,52 @@ class MovimentacaoController extends Controller
         return response()->json(['success' => true, 'status' => $status]);
     }
 
+    public function updateCartao(Request $request, $id)
+    {
+        $cartaoId = $request->input('cartao_id');
+
+        $movimentacao = Movimentacao::find($id);
+
+        if (!$movimentacao) {
+            return response()->json(['error' => 'Movimentação não encontrada'], 404);
+        }
+
+        $movimentacao->id_cartao = $cartaoId;
+        $movimentacao->save();
+
+        return response()->json(['success' => true, 'cartao_id' => $cartaoId]);
+    }
+
+    public function updateItau(Request $request, $id)
+    {
+        $movimentacao = Movimentacao::find($id);
+
+        if (!$movimentacao) {
+            return response()->json(['error' => 'Movimentação não encontrada'], 404);
+        }
+
+        $movimentacao->itau = !$movimentacao->itau;
+        $movimentacao->nb = 0;
+        $movimentacao->save();
+
+        return response()->json(['success' => true, 'itau' => $movimentacao->itau, 'nb' => $movimentacao->nb]);
+    }
+
+    public function updateNb(Request $request, $id)
+    {
+        $movimentacao = Movimentacao::find($id);
+
+        if (!$movimentacao) {
+            return response()->json(['error' => 'Movimentação não encontrada'], 404);
+        }
+
+        $movimentacao->nb = !$movimentacao->nb;
+        $movimentacao->itau = 0;
+        $movimentacao->save();
+
+        return response()->json(['success' => true, 'nb' => $movimentacao->nb, 'itau' => $movimentacao->itau]);
+    }
+
     public function deleteMovimentacao($id)
     {
         $movimentacao = Movimentacao::find($id);

@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::any('/', [IndexController::class, 'index']);
 Route::post('/movimentacao/{id}/status', [App\Http\Controllers\MovimentacaoController::class, 'updateStatus']);
+Route::post('/movimentacao/{id}/cartao', [App\Http\Controllers\MovimentacaoController::class, 'updateCartao']);
+Route::post('/movimentacao/{id}/itau', [App\Http\Controllers\MovimentacaoController::class, 'updateItau']);
+Route::post('/movimentacao/{id}/nb', [App\Http\Controllers\MovimentacaoController::class, 'updateNb']);
 Route::delete('/movimentacao/{id}', [App\Http\Controllers\MovimentacaoController::class, 'deleteMovimentacao']);
 
 Route::get('/notion', [App\Http\Controllers\MovimentacaoController::class, 'notion']);
