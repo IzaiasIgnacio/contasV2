@@ -1,7 +1,7 @@
 <!-- Barra Lateral Esquerda -->
 <aside class="fixed top-0 left-0 h-screen w-48 md:w-54 bg-black border-r border-gray-700 p-2 flex flex-col gap-4 overflow-y-auto z-10">
-    <!-- Mês e Total -->
     <div class="flex flex-col items-start p-2 gap-3">
+        <!-- Mês atual -->
         <div class="flex items-center gap-3">
             <button onclick="openDateModal()" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -10,6 +10,8 @@
             </button>
             <span class="text-xl text-white-400" id="currentDate">{{$mes_atual}} {{$ano_atual}}</span>
         </div>
+
+        <!-- Total e modal contas -->
         <div class="flex items-center gap-3">
             <button onclick="openBankModal()" class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -18,6 +20,8 @@
             </button>
             <p class="text-xl lg:text-2xl text-white-400">{{App\Models\Helper::format($total)}}</p>
         </div>
+
+        <!-- Totais por conta -->
         <div class="flex items-center gap-3">
             <span class="inline-flex items-center justify-center w-6 h-6 bg-purple-600 text-white text-xs font-bold rounded">NU</span>
             <p class="text-l text-white-400">{{App\Models\Helper::format($valor_contas['nubank']->valor)}}</p>
@@ -46,10 +50,11 @@
             <span class="inline-flex items-center justify-center w-6 h-6 bg-green-600 text-white text-xs font-bold rounded">CS</span>
             <p class="text-l text-white-400">{{App\Models\Helper::format($valor_contas['casa']->valor)}}</p>
         </div>
+        
+        <!-- Nubank e Itaú -->
         @if(($total_nb ?? 0) > 0 || ($total_itau ?? 0) > 0)
             <hr class="border-gray-600 w-full">
-        @endif
-        <!-- Totais NB e Itaú -->
+        @endif        
         @if(($total_nb ?? 0) > 0)
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center justify-center w-6 h-6 bg-purple-600 text-white text-xs font-bold rounded">N</span>
@@ -64,19 +69,12 @@
         @endif
     </div>
 
-    <!-- Botões de Ação -->
+    <!-- Upload -->
     <div class="flex flex-col gap-1">
         <button class="w-full flex justify-center p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"/>
             </svg>
-        </button>
-        <button class="w-full flex justify-center p-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 102 0V3h4v1a1 1 0 102 0V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
-            </svg>
-        </button>
     </div>
 
     <!-- Cartões -->
