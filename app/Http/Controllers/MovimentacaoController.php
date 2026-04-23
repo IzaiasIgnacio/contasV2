@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movimentacao;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Notion;
 
 class MovimentacaoController extends Controller
@@ -208,6 +209,44 @@ class MovimentacaoController extends Controller
                 // 'responsavel' => $responsavelProp && $responsavelProp->getItem() ? $responsavelProp->getName() : null,
             ];
         });
+    }
+
+    public function fecharMes($args) {
+        $movimentacoes = Movimentacao::whereNotNull('id_cartao')->where('data', 'like', $args.'%');
+        foreach ($movimentacoes->get() as $movimentacao) {
+            $movimentacao->status = 'pago';
+            $movimentacao->save();
+        }
+
+        $cartoes = $movimentacoes->select('cartao.nome', 'cartao.vencimento', 'cartao.id', DB::raw('sum(movimentacao.valor) as valor'))->join('cartao', 'cartao.id', 'id_cartao')->where('tipo', '<>', 'renda')->groupBy('cartao.id')->get();
+        foreach ($cartoes as $cartao) {
+            $mov = new Movimentacao();
+            $mov->nome = $cartao->nome.' ('.$cartao->vencimento.')';
+            $mov->data = $args.'-01';
+            $mov->tipo = 'gasto';
+            $mov->valor = $cartao->valor;
+            $mov->status = 'planejado';
+            $mov->id_cartao = $cartao->id;
+            $mov->posicao = 999;
+            $mov->save();
+        }
+
+        $mae = Movimentacao::where('responsavel', 'mae')->whereIn('nome', ['luz','vivo','nubank','klini'])->where('data', 'like', $args.'%')->get();
+        foreach ($mae as $m) {
+            $mov = new Movimentacao();
+            $mov->nome = $m->nome.' (m)';
+            $mov->data = $args.'-01';
+            $mov->tipo = 'gasto';
+            $mov->valor = $m->valor;
+            $mov->status = 'planejado';
+            $mov->posicao = 999;
+            $mov->save();
+        }
+
+        Movimentacao::where('responsavel', 'mae')->where('data', 'like', $args.'%')->update(['status' => 'pago']);
+        Movimentacao::where('nome', 'm')->where('data', 'like', $args.'%')->update(['status' => 'pago']);
+
+        return response()->json(['success' => true]);
     }
 
 }

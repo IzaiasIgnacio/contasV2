@@ -132,16 +132,35 @@ function closeDateModal() {
 function updateDate() {
     const monthSelect = document.getElementById('monthSelect');
     const yearInput = document.getElementById('yearInput');
-    const currentDateSpan = document.getElementById('currentDate');
     
-    const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-    
-    const selectedMonth = months[monthSelect.value - 1];
+    const selectedMonth = monthSelect.value;
     const selectedYear = yearInput.value;
     
-    currentDateSpan.textContent = `${selectedMonth} ${selectedYear}`;
-    closeDateModal();
+    // Send AJAX request to update the database
+    fetch('/update-mes-atual', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            mes: selectedMonth,
+            ano: selectedYear
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Reload the page to reflect the changes
+            location.reload();
+        } else {
+            alert('Erro ao atualizar o mês atual.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Erro ao atualizar o mês atual.');
+    });
 }
 
 // Lógica do Menu de Contexto
@@ -405,4 +424,26 @@ function deleteMovimentacao() {
     .finally(() => {
         hideContextMenu();
     });
+}
+
+function exportarDados() {
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/exportar`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na resposta: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.success) {
+                alert('Erro: ' + (data.error || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao exportar:', error);
+            alert('Erro ao exportar dados.');
+        });
 }

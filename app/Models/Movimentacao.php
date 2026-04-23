@@ -48,8 +48,8 @@ class Movimentacao extends Model
                                 ->whereMonth('data', $data->format('m'))
                                 ->whereYear('data', $data->format('Y'))
                                 ->where('tipo', 'terceiros')
-                                    ->orderBy('tipo')
-                                    ->orderBy('posicao')
+                                    ->orderBy('responsavel')
+                                    ->orderBy('nome')
                                         ->get();
 
         $mes['total_terceiros'] = $mes['terceiros']
@@ -73,12 +73,16 @@ class Movimentacao extends Model
                 'descricao' => null
             ],
             "claro" => [
-                'valor' => 79.9,
-                'descricao' => null
+                'valor' => 87.82,
+                'descricao' => 'globoplay'
             ],
-            "netflix" => [
-                'valor' => 59.9,
-                'descricao' => null
+            "clarotv" => [
+                'valor' => 54,
+                'descricao' => 'prime, disney, apple, netflix, max'
+            ],
+            "prime" => [
+                'valor' => 10,
+                'descricao' => 'ad-free'
             ],
             'google' => [
                 'valor' => 33.29,
@@ -127,7 +131,7 @@ class Movimentacao extends Model
 
         $valores_fixos = [
             'klini' => 302,
-            'sky' => 84.9,
+            'clarotv' => 84.9,
             'vivo' => 44.42,
             'globoplay' => 6.45,
             'youtube' => 8.6,

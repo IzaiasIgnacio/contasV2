@@ -10,4 +10,5 @@ class Consolidado extends Model
     use HasFactory;
 
     protected $table = 'consolidado';
+    public $timestamps = false;
 }

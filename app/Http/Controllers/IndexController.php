@@ -51,6 +51,7 @@ class IndexController extends Controller
         $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.$consolidado->where('nome', 'mes_atual')->first()->valor);
         $ano_atual = $data->year;
         $mes_atual = ucfirst($data->locale('pt-br')->monthName);
+        $mes_atual_numero = $data->month;
 
         for ($i=0;$i<=7;$i++) {
             $movimentacoes_mes[$i] = $movimentacao->mes($data);
@@ -84,6 +85,7 @@ class IndexController extends Controller
             'total' => $total,
             'mes_atual' => $mes_atual,
             'ano_atual' => $ano_atual,
+            'mes_atual_numero' => $mes_atual_numero,
             'total_nb' => $total_nb,
             'total_itau' => $total_itau,
             'diferenca_nb' => $diferenca_nb,
@@ -92,6 +94,17 @@ class IndexController extends Controller
             'maximo_movimentacoes' => $this->getMaximoMovimentacoes($movimentacoes_mes),
             'maximo_terceiros' => $this->getMaximoTerceiros($movimentacoes_mes)
         ]);
+    }
+
+    public function updateMesAtual(Request $request)
+    {
+        $mes = str_pad($request->input('mes'), 2, '0', STR_PAD_LEFT);
+        $ano = $request->input('ano');
+        $valor = $mes . '/' . $ano;
+
+        Consolidado::where('nome', 'mes_atual')->update(['valor' => $valor]);
+
+        return response()->json(['success' => true]);
     }
 
     private function calculosExtrasMeses($total, $movimentacoes_mes) {
