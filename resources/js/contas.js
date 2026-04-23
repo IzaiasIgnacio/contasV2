@@ -5,9 +5,18 @@ document.addEventListener('DOMContentLoaded', function() {
     window.currentMovimentacaoId = null;
     window.currentMovimentacaoElement = null;
     window.currentMovimentacaoType = null;
+    window.tooltipTimeout = null;
 
     // Inicializar menu de contexto
     const statusContextMenu = document.getElementById('statusContextMenu');
+
+    // Inicializar tooltip
+    if (!document.getElementById('movimentacaoTooltip')) {
+        const tooltip = document.createElement('div');
+        tooltip.id = 'movimentacaoTooltip';
+        tooltip.className = 'fixed bg-gray-800 text-white p-2 rounded shadow-lg z-50 hidden max-w-xs';
+        document.body.appendChild(tooltip);
+    }
 
     // Event listener for right-click on movimentacao lines
     document.addEventListener('contextmenu', function(event) {
@@ -41,6 +50,19 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
         if (statusContextMenu && !statusContextMenu.contains(event.target)) {
             hideContextMenu();
+        }
+
+        // Handle tooltip for movimentacao lines
+        const target = event.target.closest('.linha_movimentacao');
+        if (target) {
+            const descricao = target.getAttribute('data-movimentacao-descricao');
+            if (descricao && descricao.trim() !== '') {
+                showTooltip(descricao, event.clientX, event.clientY);
+            } else {
+                hideTooltip();
+            }
+        } else {
+            hideTooltip();
         }
     });
 
@@ -607,4 +629,28 @@ function salvarEdicao() {
         if (spinner) spinner.classList.add('hidden');
         closeEditModal();
     });
+}
+
+function showTooltip(text, x, y) {
+    const tooltip = document.getElementById('movimentacaoTooltip');
+    tooltip.textContent = text;
+    tooltip.style.left = (x + 10) + 'px';
+    tooltip.style.top = (y + 10) + 'px';
+    tooltip.classList.remove('hidden');
+
+    if (window.tooltipTimeout) clearTimeout(window.tooltipTimeout);
+    window.tooltipTimeout = setTimeout(() => {
+        hideTooltip();
+    }, 3000);
+}
+
+function hideTooltip() {
+    const tooltip = document.getElementById('movimentacaoTooltip');
+    if (tooltip) {
+        tooltip.classList.add('hidden');
+    }
+    if (window.tooltipTimeout) {
+        clearTimeout(window.tooltipTimeout);
+        window.tooltipTimeout = null;
+    }
 }
