@@ -183,4 +183,21 @@ class IndexController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function salvarContas(Request $request)
+    {
+        $contas = $request->input('contas');
+
+        if (is_array($contas)) {
+            foreach ($contas as $nome => $valor) {
+                $consolidado = Consolidado::where('nome', $nome)->first();
+                if ($consolidado) {
+                    $consolidado->valor = $valor;
+                    $consolidado->save();
+                }
+            }
+        }
+
+        return response()->json(['success' => true]);
+    }
 }

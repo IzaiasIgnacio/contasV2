@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::any('/', [IndexController::class, 'index']);
 
 Route::post('/update-mes-atual', [IndexController::class, 'updateMesAtual']);
+Route::post('/contas/salvar', [IndexController::class, 'salvarContas']);
 
 Route::post('/movimentacao/{id}/status', [App\Http\Controllers\MovimentacaoController::class, 'updateStatus']);
 Route::post('/movimentacao/{id}/cartao', [App\Http\Controllers\MovimentacaoController::class, 'updateCartao']);

@@ -81,6 +81,7 @@
             </svg>
         </button>
     </div>
+    
     <!-- Cartões -->
     <div class="flex flex-col gap-2">
        @foreach ($cartoes as $cartao)

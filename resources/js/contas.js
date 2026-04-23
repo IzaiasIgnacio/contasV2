@@ -460,3 +460,55 @@ function exportarDados() {
             if (spinner) spinner.classList.add('hidden');
         });
 }
+
+function salvarContas() {
+    const btn = document.getElementById('btnSalvarContas');
+    const spinner = document.getElementById('spinnerSalvarContas');
+    
+    if (btn) btn.disabled = true;
+    if (spinner) spinner.classList.remove('hidden');
+
+    const inputs = document.querySelectorAll('#contasInputsContainer input[data-nome]');
+    const contas = {};
+    inputs.forEach(input => {
+        // Remove espaços em branco e troca vírgula por ponto, mantendo como string para preservar o . e os zeros
+        let val = input.value.trim().replace(',', '.');
+        contas[input.getAttribute('data-nome')] = val || '0.00';
+    });
+
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/contas/salvar`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ contas })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Falha ao salvar contas');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível salvar as contas.'));
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        alert('Erro ao salvar as contas. Tente novamente.');
+    })
+    .finally(() => {
+        if (btn) btn.disabled = false;
+        if (spinner) spinner.classList.add('hidden');
+    });
+}
