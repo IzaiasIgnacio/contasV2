@@ -72,6 +72,15 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    const editModal = document.getElementById('editModal');
+    if (editModal) {
+        editModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
+    }
+
     // Oculta o menu ao rolar a tela principal
     const mainContent = document.querySelector('main');
     if (mainContent && statusContextMenu) {
@@ -510,5 +519,92 @@ function salvarContas() {
     .finally(() => {
         if (btn) btn.disabled = false;
         if (spinner) spinner.classList.add('hidden');
+    });
+}
+
+function openEditModal() {
+    if (!window.currentMovimentacaoElement) {
+        alert('Selecione uma movimentação primeiro.');
+        return;
+    }
+    
+    const id = window.currentMovimentacaoId;
+    const nome = window.currentMovimentacaoElement.getAttribute('data-movimentacao-nome') || '';
+    const valor = window.currentMovimentacaoElement.getAttribute('data-movimentacao-valor') || '';
+    const descricao = window.currentMovimentacaoElement.getAttribute('data-movimentacao-descricao') || '';
+
+    // Hide context menu first
+    hideContextMenu();
+
+    document.getElementById('formEditMovimentacao').dataset.movimentacaoId = id;
+    document.getElementById('editNome').value = nome;
+    document.getElementById('editValor').value = valor;
+    document.getElementById('editDescricao').value = descricao;
+
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editModal').classList.add('flex');
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').classList.add('hidden');
+    document.getElementById('editModal').classList.remove('flex');
+}
+
+function salvarEdicao() {
+    const id = document.getElementById('formEditMovimentacao').dataset.movimentacaoId;
+    if (!id) {
+        alert('ID da movimentação não encontrado.');
+        return;
+    }
+
+    const btn = document.getElementById('btnSalvarEdicao');
+    const spinner = document.getElementById('spinnerSalvarEdicao');
+    
+    if (btn) btn.disabled = true;
+    if (spinner) spinner.classList.remove('hidden');
+
+    const nome = document.getElementById('editNome').value.trim();
+    let valor = document.getElementById('editValor').value.trim();
+    const descricao = document.getElementById('editDescricao').value.trim();
+    
+    if (valor.includes(',')) {
+        valor = valor.replace(/\./g, '').replace(',', '.');
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/movimentacao/${id}/editar`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ nome, valor, descricao })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Falha ao salvar edição');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível salvar as alterações.'));
+        }
+    })
+    .catch(error => {
+        console.error(error);
+        alert('Erro ao salvar as alterações. Tente novamente.');
+    })
+    .finally(() => {
+        if (btn) btn.disabled = false;
+        if (spinner) spinner.classList.add('hidden');
+        closeEditModal();
     });
 }

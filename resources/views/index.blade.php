@@ -57,6 +57,9 @@
     <!-- Modal Seleção de Data -->
     @include('modal_data')
 
+    <!-- Modal Editar -->
+    @include('modal_editar')
+
     <!-- Menu de Contexto -->
     @include('menu_contexto', ['cartoes' => $cartoes])
 

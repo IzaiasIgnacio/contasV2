@@ -20,6 +20,7 @@ Route::post('/update-mes-atual', [IndexController::class, 'updateMesAtual']);
 Route::post('/contas/salvar', [IndexController::class, 'salvarContas']);
 
 Route::post('/movimentacao/{id}/status', [App\Http\Controllers\MovimentacaoController::class, 'updateStatus']);
+Route::post('/movimentacao/{id}/editar', [App\Http\Controllers\MovimentacaoController::class, 'editar']);
 Route::post('/movimentacao/{id}/cartao', [App\Http\Controllers\MovimentacaoController::class, 'updateCartao']);
 Route::post('/movimentacao/{id}/itau', [App\Http\Controllers\MovimentacaoController::class, 'updateItau']);
 Route::post('/movimentacao/{id}/nb', [App\Http\Controllers\MovimentacaoController::class, 'updateNb']);

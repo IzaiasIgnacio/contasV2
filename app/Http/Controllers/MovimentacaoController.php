@@ -31,6 +31,30 @@ class MovimentacaoController extends Controller
         return response()->json(['success' => true, 'status' => $status]);
     }
 
+    public function editar(Request $request, $id)
+    {
+        $nome = $request->input('nome');
+        $valor = $request->input('valor');
+        $descricao = $request->input('descricao');
+
+        if (empty($nome) || $valor === null || $valor === '') {
+            return response()->json(['error' => 'Nome e valor são obrigatórios'], 422);
+        }
+
+        $movimentacao = Movimentacao::find($id);
+
+        if (!$movimentacao) {
+            return response()->json(['error' => 'Movimentação não encontrada'], 404);
+        }
+
+        $movimentacao->nome = $nome;
+        $movimentacao->valor = $valor;
+        $movimentacao->descricao = $descricao;
+        $movimentacao->save();
+
+        return response()->json(['success' => true, 'nome' => $movimentacao->nome, 'valor' => $movimentacao->valor, 'descricao' => $movimentacao->descricao]);
+    }
+
     public function updateCartao(Request $request, $id)
     {
         $cartaoId = $request->input('cartao_id');
