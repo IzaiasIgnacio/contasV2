@@ -427,6 +427,14 @@ function deleteMovimentacao() {
 }
 
 function exportarDados() {
+    const btn = document.getElementById('btnExportar');
+    const icon = document.getElementById('iconExportar');
+    const spinner = document.getElementById('spinnerExportar');
+    
+    if (btn) btn.disabled = true;
+    if (icon) icon.classList.add('hidden');
+    if (spinner) spinner.classList.remove('hidden');
+
     const baseUrl = window.location.origin;
     const url = `${baseUrl}/index.php/exportar`;
 
@@ -445,5 +453,10 @@ function exportarDados() {
         .catch(error => {
             console.error('Erro ao exportar:', error);
             alert('Erro ao exportar dados.');
+        })
+        .finally(() => {
+            if (btn) btn.disabled = false;
+            if (icon) icon.classList.remove('hidden');
+            if (spinner) spinner.classList.add('hidden');
         });
 }

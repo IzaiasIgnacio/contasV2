@@ -1,7 +1,7 @@
 <div id="dateModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
     <div class="bg-gray-800 rounded-lg border border-gray-700 p-4 w-full max-w-sm">
         <div class="flex justify-between items-center mb-3">
-            <h2 class="text-lg font-semibold text-white">Selecionar Período</h2>
+            <h2 class="text-lg font-semibold text-white">Mês atual</h2>
             <button onclick="closeDateModal()" class="text-gray-400 hover:text-white">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
