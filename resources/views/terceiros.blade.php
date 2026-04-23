@@ -1,6 +1,6 @@
 <div>
     @forelse ($mes['terceiros'] as $terceiro)
-        <div class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2  bg-gray-900">
+        <div data-movimentacao-id="{{ $terceiro->id }}" data-movimentacao-type="{{ $terceiro->tipo }}" data-movimentacao-nome="{{ $terceiro->nome }}" data-movimentacao-valor="{{ $terceiro->valor }}" data-movimentacao-descricao="{{ $terceiro->descricao }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 linha_movimentacao {{ $terceiro->status == 'pago' ? 'bg-gray-700' : 'bg-gray-900' }}">
             <div class="flex items-center gap-1">
                 <span class="text-gray-300 text-[15px]">{{$terceiro->nome}} ({{$terceiro->responsavel}})</span>
                 @if (!empty($terceiro->cartao->cor))<div class="w-4 h-3 bg-{{$terceiro->cartao->cor}} rounded text-xs border border-white/50"></div>@endif
@@ -14,8 +14,8 @@
     @endforelse
 </div>
 @for ($i = count($mes['terceiros']); $i < $maximo_terceiros; $i++)
-<div class="flex justify-between items-center text-sm border-b border-gray-500 px-2">
-    <span class="text-gray-300 text-base font-semibold">&nbsp;</span>
+<div class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 linha_movimentacao">
+    <span class="text-gray-300 text-[15px]">&nbsp;</span>
 </div>
 @endfor
 
