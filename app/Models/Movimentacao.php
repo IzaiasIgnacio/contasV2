@@ -156,7 +156,8 @@ class Movimentacao extends Model
         }
 
         $valores_fixos = [
-            'google' => 4
+            'google' => 4,
+            'divida' => 100
         ];
 
         $p = 1;

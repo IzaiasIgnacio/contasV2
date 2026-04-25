@@ -41,7 +41,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3">
                 @foreach ($movimentacoes_mes as $mes)
                     <div class="bg-gray-900 rounded-lg border border-gray-700">
-                        @include('terceiros', ['mes' => $mes])
+                        @php $antigo -= 100; @endphp
+                        @include('terceiros', ['mes' => $mes, 'antigo' => $antigo])
                     </div>
                 @endforeach
             </div>

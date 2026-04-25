@@ -81,6 +81,7 @@ class IndexController extends Controller
         return view('index', [
             'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes),
             'terceiros' => $terceiros->listar(),
+            'antigo' => $consolidado->where('nome', 'chah')->first()->valor,
             'cartoes' => $cartoes,
             'total' => $total,
             'mes_atual' => $mes_atual,

@@ -14,7 +14,6 @@ class Terceiros extends Model {
             'junior' => 'Junior',
             'tia_cacilda' => 'Tia Cacilda',
             'tia_lucenir' => 'Tia Lucenir',
-            
         ];
     } 
     

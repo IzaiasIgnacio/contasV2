@@ -24,7 +24,7 @@
 @foreach ($mes['total_terceiros'] as $responsavel => $valor)
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-purple-800">
     <span class="text-gray-300 text-base font-semibold">{{ ucfirst($responsavel) }}</span>
-    <span class="text-gray-300 text-base font-semibold">{{ App\Models\Helper::format($valor) }}</span>
+    <span class="text-gray-300 text-base font-semibold">{{ App\Models\Helper::format($valor) }} {{ ($responsavel == 'chah') ? '('.App\Models\Helper::format($antigo).')' : '' }}</span>
 </div>
 @endforeach
 
