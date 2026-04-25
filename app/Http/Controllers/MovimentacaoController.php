@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consolidado;
 use App\Models\Movimentacao;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -131,8 +132,7 @@ class MovimentacaoController extends Controller
 
     private function criarMovimentacao($gasto) {
         $id_parcela = time();
-        $data = Carbon::now();
-        $data = date_add($data, date_interval_create_from_date_string("1 month"));
+        $data = Carbon::createFromFormat('d/m/Y', '01/'.Consolidado::where('nome', 'mes_atual')->first()->valor)->addMonth();
 
         $mov = Movimentacao::where('nome', $gasto['nome'])
                             ->whereMonth('data', $data->format('m'))
