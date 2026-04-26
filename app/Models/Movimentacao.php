@@ -59,6 +59,8 @@ class Movimentacao extends Model
             })
             ->toArray();
         
+        $mes['total_terceiros']['mae'] -= 1400;
+
         return $mes;
     }
 
