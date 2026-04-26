@@ -58,13 +58,13 @@
         @if(($total_nb ?? 0) > 0)
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center justify-center w-6 h-6 bg-purple-600 text-white text-xs font-bold rounded">N</span>
-                <p class="text-l text-white-400">{{App\Models\Helper::format($total_nb ?? 0)}} <span class="text-sm text-gray-400">({{($diferenca_nb ?? 0) < 0 ? '+' : ''}}{{App\Models\Helper::format($diferenca_nb ?? 0)}})</span></p>
+                <p class="text-sm text-white-400 whitespace-nowrap">{{App\Models\Helper::format($total_nb ?? 0)}} <span class="text-sm text-gray-400">({{$diferenca_nb}})</span></p>
             </div>
         @endif
         @if(($total_itau ?? 0) > 0)
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center justify-center w-6 h-6 bg-orange-500 text-white text-xs font-bold rounded">I</span>
-                <p class="text-l  text-white-400">{{App\Models\Helper::format($total_itau ?? 0)}} <span class="text-sm text-gray-400">({{($diferenca_itau ?? 0) < 0 ? '+' : ''}}{{App\Models\Helper::format($diferenca_itau ?? 0)}})</span></p>
+                <p class="text-sm  text-white-400 whitespace-nowrap">{{App\Models\Helper::format($total_itau ?? 0)}} <span class="text-sm text-gray-400">({{$diferenca_itau}})</span></p>
             </div>
         @endif
     </div>

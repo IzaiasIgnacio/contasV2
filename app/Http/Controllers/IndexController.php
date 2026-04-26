@@ -75,8 +75,8 @@ class IndexController extends Controller
         
 
         // Calcular diferenças (total movimentações - valor atual na conta)
-        $diferenca_itau = $total_itau - $valor_contas['itau']->valor;
-        $diferenca_nb = $total_nb - $valor_contas['nubank']->valor;
+        $diferenca_itau = $valor_contas['itau']->valor - $total_itau;
+        $diferenca_nb = $valor_contas['nubank']->valor - $total_nb;
 
         return view('index', [
             'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes),
