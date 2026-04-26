@@ -134,6 +134,10 @@ class MovimentacaoController extends Controller
         $id_parcela = time();
         $data = Carbon::createFromFormat('d/m/Y', '01/'.Consolidado::where('nome', 'mes_atual')->first()->valor)->addMonth();
 
+        if ($gasto['pix']) {
+            $data = $data->subMonth();
+        }
+
         $mov = Movimentacao::where('nome', $gasto['nome'])
                             ->whereMonth('data', $data->format('m'))
                             ->whereYear('data', $data->format('Y'))
