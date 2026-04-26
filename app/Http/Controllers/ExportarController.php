@@ -7,6 +7,7 @@ use App\Models\Movimentacao;
 use App\Models\Consolidado;
 use App\Models\Rescisao;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class ExportarController extends Controller {
     
@@ -123,17 +124,54 @@ class ExportarController extends Controller {
     public function exportar() {
         $data = $this->gerarRelatorio();
 
+        // Criar dump do banco de dados
+        $dumpFile = 'db_contasV2.sql';
+        $path = '/mnt/host/db/' . $dumpFile;
+        
+        // Verificar se mysqldump existe
+        exec("which mysqldump 2>&1", $whichOutput, $whichReturn);
+        if ($whichReturn !== 0) {
+            $dumpSuccess = false;
+            $dumpError = "mysqldump não encontrado: " . implode("\n", $whichOutput);
+        } else {
+            $command = "mysqldump -h " . env('DB_HOST') . " -u " . env('DB_USERNAME') . " --password=" . escapeshellarg(env('DB_PASSWORD')) . " --skip-ssl " . env('DB_DATABASE') . " 2>&1";
+            exec($command, $output, $returnVar);
+            if ($returnVar === 0) {
+                $dumpContent = implode("\n", $output);
+                $writeSuccess = file_put_contents($path, $dumpContent);
+                if (!$writeSuccess) {
+                    $dumpSuccess = false;
+                    $dumpError = "Erro ao escrever o arquivo de dump";
+                } else {
+                    $dumpSuccess = true;
+                }
+            } else {
+                $dumpSuccess = false;
+                $dumpError = implode("\n", $output);
+            }
+        }
+
         $response = \Illuminate\Support\Facades\Http::withHeaders([
             'Content-Type' => 'application/json',
             'X-Master-key' => env('JSONBIN_KEY'),
         ])->put('https://api.jsonbin.io/v3/b/'.env('JSONBIN_ID'), $data);
         
+        $result = ['dump_success' => $dumpSuccess];
+        if ($dumpSuccess) {
+            $result['dump'] = $dumpFile;
+        } else {
+            $result['dump_error'] = $dumpError;
+        }
+        
         if ($response->successful()) {
-            return response()->json(['success' => true]);
+            $result['success'] = true;
+            return response()->json($result);
         } else {
             $errorData = $response->json();
             $errorMessage = $errorData['message'] ?? 'Erro desconhecido no JSONBin';
-            return response()->json(['success' => false, 'error' => $errorMessage], 500);
+            $result['success'] = false;
+            $result['error'] = $errorMessage;
+            return response()->json($result, 500);
         }
     }
     
