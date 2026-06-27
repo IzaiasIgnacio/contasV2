@@ -44,8 +44,6 @@ class ExportarController extends Controller {
 
             $gastos = $registros->where('tipo', 'gasto')->where('status', '!=', 'pago')->sum('valor');
             $rendas = $registros->where('tipo', 'renda')->where('status', '!=', 'pago')->sum('valor');
-            $novos = $registros->where('tipo', 'gasto')->where('novo', 1)->sum('valor');
-            $renda_novos = $registros->where('tipo', 'renda')->where('novo', 1)->sum('valor');
 
             // Atualiza saldo parcial
             $saldoParcial = $saldoParcial - $gastos + $rendas;
@@ -64,7 +62,6 @@ class ExportarController extends Controller {
             
             $resultado["movimentacoes"][] = [
                 "mes" => ucfirst($mes->locale('pt_BR')->translatedFormat('F')),
-                "novo" => $novos - ($renda_novos - $salario->valor),
                 "gastos" => $gastos,
                 "rendas" => $rendas,
                 "saldo_parcial" => $saldoParcial,

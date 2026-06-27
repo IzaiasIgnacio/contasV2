@@ -45,8 +45,6 @@ class Movimentacao extends Model
             'salario' => $salarioMovimentacao ? $salarioMovimentacao->valor : 0,
             'status_salario' => $salarioMovimentacao ? $salarioMovimentacao->status : 'definido',
             'salario_movimentacao' => $salarioMovimentacao,
-            'novo' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('tipo', 'gasto')->where('novo', 1)->where('status', '<>', 'pago')->sum('valor')
-            - $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('tipo', 'renda')->where('novo', 1)->where('nome', '!=', 'salario')->where('status', '<>', 'pago')->sum('valor'),
             'rescisao' => Rescisao::where('data', $data->format('Y-m-d'))->first()->subtotal - Rescisao::where('data', $data->format('Y-m-d'))->first()->retirada + 10286,
         ];
         
