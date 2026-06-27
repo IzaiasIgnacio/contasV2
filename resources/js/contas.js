@@ -75,25 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Show card label tooltip on mouseover for movimentacao lines
-    document.addEventListener('mouseover', function(event) {
-        const target = event.target.closest('.linha_movimentacao');
-        if (target) {
-            const rotulo = target.getAttribute('data-movimentacao-rotulo');
-            if (rotulo && rotulo.trim() !== '') {
-                showTooltip(rotulo, event.clientX, event.clientY);
-            }
-        }
-    });
-
-    document.addEventListener('mouseout', function(event) {
-        const target = event.target.closest('.linha_movimentacao');
-        const related = event.relatedTarget && event.relatedTarget.closest ? event.relatedTarget.closest('.linha_movimentacao') : null;
-        if (target && !related) {
-            hideTooltip();
-        }
-    });
-
     // Fechar modais ao clicar fora
     const transactionModal = document.getElementById('transactionModal');
     if (transactionModal) {
