@@ -68,7 +68,7 @@ class ExportarController extends Controller {
                 "gastos" => $gastos,
                 "rendas" => $rendas,
                 "saldo_parcial" => $saldoParcial,
-                "rescisao" => Rescisao::where('data', $inicio)->first()->subtotal +  + 9770 ?? 0,
+                "rescisao" => Rescisao::where('data', $inicio)->first()->subtotal +  + 10286 ?? 0,
                 "registros" => $registrosMes->map(function ($m) {
                     return [
                         "nome" => $m->nome,

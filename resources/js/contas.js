@@ -315,6 +315,53 @@ function setCartao(cartaoId) {
     });
 }
 
+function setTipo(tipo) {
+    if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
+        console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);
+        return;
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    if (!token) {
+        console.error('CSRF token not found');
+        return;
+    }
+
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/index.php/movimentacao/${window.currentMovimentacaoId}/tipo`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ tipo })
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Falha ao atualizar tipo');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert('Erro: ' + (data.error || 'Não foi possível atualizar o tipo.'));
+        }
+    })
+    .catch((error) => {
+        console.error(error);
+        alert('Erro ao atualizar o tipo da movimentação. Tente novamente.');
+    })
+    .finally(() => {
+        hideContextMenu();
+    });
+}
+
 function setItau() {
     if (!window.currentMovimentacaoId || window.currentMovimentacaoId === 'null' || window.currentMovimentacaoId === '') {
         console.error('Invalid movimentacao ID:', window.currentMovimentacaoId);

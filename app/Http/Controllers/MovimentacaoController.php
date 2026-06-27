@@ -26,6 +26,11 @@ class MovimentacaoController extends Controller
             return response()->json(['error' => 'Movimentação não encontrada'], 404);
         }
 
+        if ($status == 'pago') {
+            $movimentacao->itau = 0;
+            $movimentacao->nb = 0;
+        }
+
         $movimentacao->status = $status;
         $movimentacao->save();
 
@@ -70,6 +75,31 @@ class MovimentacaoController extends Controller
         $movimentacao->save();
 
         return response()->json(['success' => true, 'cartao_id' => $cartaoId]);
+    }
+
+    public function updateTipo(Request $request, $id)
+    {
+        $tipo = $request->input('tipo');
+        $tipos = ['gasto', 'renda', 'terceiros'];
+
+        if (!in_array($tipo, $tipos)) {
+            return response()->json(['error' => 'Tipo inválido'], 422);
+        }
+
+        $movimentacao = Movimentacao::find($id);
+
+        if (!$movimentacao) {
+            return response()->json(['error' => 'Movimentação não encontrada'], 404);
+        }
+
+        $movimentacao->tipo = $tipo;
+        if ($tipo !== 'gasto') {
+            $movimentacao->itau = 0;
+            $movimentacao->nb = 0;
+        }
+        $movimentacao->save();
+
+        return response()->json(['success' => true, 'tipo' => $tipo]);
     }
 
     public function updateItau(Request $request, $id)
@@ -138,7 +168,21 @@ class MovimentacaoController extends Controller
             $data = $data->subMonth();
         }
 
+        if ($gasto['virado']) {
+            $data = $data->addMonth();
+        }
+
+        // Busca o ID do cartão a partir do nome obtido do Notion
+        $cartaoId = null;
+        if (!empty($gasto['cartao'])) {
+            $cartao = \App\Models\Cartao::where('nome', $gasto['cartao'])->first();
+            if ($cartao) {
+                $cartaoId = $cartao->id;
+            }
+        }
+
         $mov = Movimentacao::where('nome', $gasto['nome'])
+                            ->where('id_cartao', $cartaoId)
                             ->whereMonth('data', $data->format('m'))
                             ->whereYear('data', $data->format('Y'))
                                 ->first();
@@ -147,15 +191,6 @@ class MovimentacaoController extends Controller
             $mov->save();
         }
         else {
-            // Busca o ID do cartão a partir do nome obtido do Notion
-            $cartaoId = null;
-            if (!empty($gasto['cartao'])) {
-                $cartao = \App\Models\Cartao::where('nome', $gasto['cartao'])->first();
-                if ($cartao) {
-                    $cartaoId = $cartao->id;
-                }
-            }
-
             for ($parcela=1;$parcela<=$gasto['parcelas'];$parcela++) {
                 $movimentacao = new Movimentacao();
                 $nome = $gasto['nome'];
@@ -214,8 +249,9 @@ class MovimentacaoController extends Controller
             $cartaoProp = $gastoPage->getProperty('cartao');
             $parcelasProp = $gastoPage->getProperty('parcelas');
             $pixProp = $gastoPage->getProperty('pix');
-            $tipoProp = $gastoPage->getProperty('tipo');
-            $responsavelProp = $gastoPage->getProperty('responsavel');
+            $viradoProp = $gastoPage->getProperty('virado');
+            // $tipoProp = $gastoPage->getProperty('tipo');
+            // $responsavelProp = $gastoPage->getProperty('responsavel');
 
             return [
                 'id' => $gastoPage->getId(),
@@ -232,6 +268,7 @@ class MovimentacaoController extends Controller
 
                 // Propriedades de Checkbox usam isChecked()
                 'pix' => $pixProp ? $pixProp->isChecked() : false,
+                'virado' => $viradoProp ? $viradoProp->isChecked() : false,
 
                 // 'tipo' => $tipoProp && $tipoProp->getItem() ? $tipoProp->getName() : 'gasto',
                 // 'responsavel' => $responsavelProp && $responsavelProp->getItem() ? $responsavelProp->getName() : null,

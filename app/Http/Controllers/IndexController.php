@@ -53,6 +53,7 @@ class IndexController extends Controller
         $mes_atual = ucfirst($data->locale('pt-br')->monthName);
         $mes_atual_numero = $data->month;
 
+        $movimentacoes_mes = [];
         for ($i=0;$i<=7;$i++) {
             $movimentacoes_mes[$i] = $movimentacao->mes($data);
             $data->addMonth();
@@ -128,6 +129,11 @@ class IndexController extends Controller
             $movimentacoes_mes[$i]['sobra'] += ($mes['status_salario'] == 'definido') ? $mes['salario'] : 0;
             $movimentacoes_mes[$i]['total'] = $total + $movimentacoes_mes[$i]['sobra'];
             $movimentacoes_mes[$i]['cdb'] = $cdb;
+            $movimentacoes_mes[$i]['novos'] = $mes['movimentacoes']
+                ->where('tipo', 'gasto')
+                ->where('fixo', false)
+                ->filter(fn($mov) => is_null($mov->parcela) || $mov->parcela == 1)
+                ->sum('valor');
             $total += $movimentacoes_mes[$i]['sobra'];
         }
 

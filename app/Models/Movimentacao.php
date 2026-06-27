@@ -22,6 +22,11 @@ class Movimentacao extends Model
         $this->definirValoresFixosMes($data);
         $this->rescisao($data->copy());
 
+        $salarioMovimentacao = $this->whereMonth('data', $data->format('m'))
+            ->whereYear('data', $data->format('Y'))
+            ->where('nome', 'salario')
+            ->first();
+
         $mes = [
             'mes' => ucfirst($data->locale('pt-br')->monthName),
             'numero_mes' => $data->locale('pt-br')->month,
@@ -37,11 +42,12 @@ class Movimentacao extends Model
                                     ->orderByDesc(DB::raw('total_parcelas - parcela'))
                                     ->orderBy('nome')
                                         ->get(),
-            'salario' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('nome', 'salario')->first()->valor,
-            'status_salario' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('nome', 'salario')->first()->status,
+            'salario' => $salarioMovimentacao ? $salarioMovimentacao->valor : 0,
+            'status_salario' => $salarioMovimentacao ? $salarioMovimentacao->status : 'definido',
+            'salario_movimentacao' => $salarioMovimentacao,
             'novo' => $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('tipo', 'gasto')->where('novo', 1)->where('status', '<>', 'pago')->sum('valor')
             - $this->whereMonth('data', $data->format('m'))->whereYear('data', $data->format('Y'))->where('tipo', 'renda')->where('novo', 1)->where('nome', '!=', 'salario')->where('status', '<>', 'pago')->sum('valor'),
-            'rescisao' => Rescisao::where('data', $data->format('Y-m-d'))->first()->subtotal - Rescisao::where('data', $data->format('Y-m-d'))->first()->retirada + 9770,
+            'rescisao' => Rescisao::where('data', $data->format('Y-m-d'))->first()->subtotal - Rescisao::where('data', $data->format('Y-m-d'))->first()->retirada + 10286,
         ];
         
         $mes['terceiros'] = $this
@@ -71,7 +77,7 @@ class Movimentacao extends Model
                 'descricao' => null
             ],
             "gas" => [
-                'valor' => 160,
+                'valor' => 250,
                 'descricao' => null
             ],
             "claro" => [

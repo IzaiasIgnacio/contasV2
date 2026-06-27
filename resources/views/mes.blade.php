@@ -10,7 +10,7 @@
     </button>
 </div>
 <div>
-    <div class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug
+    <div data-movimentacao-id="{{ $mes['salario_movimentacao']->id ?? '' }}" data-movimentacao-type="renda" data-movimentacao-nome="salario" data-movimentacao-valor="{{ $mes['salario'] }}" data-movimentacao-descricao="{{ $mes['salario_movimentacao']->descricao ?? '' }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
     @if($mes['status_salario'] == 'pago') bg-blue-600 @endif
     @if($mes['status_salario'] == 'definido') bg-blue-800 @endif
     ">
@@ -66,6 +66,12 @@
         <span class="text-gray-300 text-[15px] font-semibold">Novo</span>
     </div>
     <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['novo'])}}</span>
+</div>
+<div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-red-800">
+    <div class="flex items-center gap-1">
+        <span class="text-gray-300 text-[15px] font-semibold">Novos</span>
+    </div>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['novos'])}}</span>
 </div>
 @isset($mes['cdb'])
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-green-800">
