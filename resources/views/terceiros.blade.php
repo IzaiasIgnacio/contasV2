@@ -2,12 +2,12 @@
     @forelse ($mes['terceiros'] as $terceiro)
         <div data-movimentacao-id="{{ $terceiro->id }}" data-movimentacao-type="{{ $terceiro->tipo }}"
         data-movimentacao-nome="{{ $terceiro->nome }}" data-movimentacao-valor="{{ $terceiro->valor }}"
-        data-movimentacao-descricao="{{ $terceiro->descricao }}"
+        data-movimentacao-descricao="{{ $terceiro->descricao }}" data-movimentacao-rotulo="{{ optional($terceiro->cartao)->rotulo }}"
         class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 linha_movimentacao
         {{ $terceiro->status == 'pago' ? 'bg-purple-950' : 'bg-gray-900' }}">
             <div class="flex items-center gap-1">
                 <span class="text-gray-300 text-[15px]">{{$terceiro->nome}} ({{$terceiro->responsavel}})</span>
-                @if (!empty($terceiro->cartao->cor))<div class="w-4 h-3 bg-{{$terceiro->cartao->cor}} rounded text-xs border border-white/50"></div>@endif
+                @if (!empty($terceiro->cartao->cor))<div class="w-4 h-3 bg-{{$terceiro->cartao->cor}} rounded text-xs border border-white/50 movimentacao-cartao-indicator" data-movimentacao-rotulo="{{ optional($terceiro->cartao)->rotulo }}" onclick="event.stopPropagation(); showTooltip({{ json_encode(optional($terceiro->cartao)->rotulo) }}, event.clientX, event.clientY)" onmouseleave="hideTooltip()"></div>@endif
             </div>
             <span class="text-gray-300 text-[15px]">{{App\Models\Helper::format($terceiro->valor)}}</span>
         </div>
