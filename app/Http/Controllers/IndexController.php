@@ -134,6 +134,12 @@ class IndexController extends Controller
                 ->where('fixo', false)
                 ->filter(fn($mov) => is_null($mov->parcela) || $mov->parcela == 1)
                 ->sum('valor');
+            $movimentacoes_mes[$i]['encerrados'] = $mes['movimentacoes']
+                ->where('tipo', 'gasto')
+                ->where('fixo', false)
+                ->where('total_parcelas', '>', 1)
+                ->filter(fn($mov) => $mov->parcela == $mov->total_parcelas)
+                ->sum('valor');
             $total += $movimentacoes_mes[$i]['sobra'];
         }
 

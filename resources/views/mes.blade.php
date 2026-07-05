@@ -62,6 +62,12 @@
     </div>
     <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['novos'])}}</span>
 </div>
+<div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-red-800">
+    <div class="flex items-center gap-1">
+        <span class="text-gray-300 text-[15px] font-semibold">Encerrados</span>
+    </div>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['encerrados'])}}</span>
+</div>
 @isset($mes['cdb'])
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-green-800">
     <div class="flex items-center gap-1">
