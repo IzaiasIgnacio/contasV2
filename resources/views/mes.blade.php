@@ -21,6 +21,7 @@
     </div>
     @foreach ($mes['movimentacoes'] as $movimentacao)
     <div data-movimentacao-id="{{ $movimentacao->id }}" data-movimentacao-type="{{ $movimentacao->tipo }}" data-movimentacao-nome="{{ $movimentacao->nome }}" data-movimentacao-valor="{{ $movimentacao->valor }}" data-movimentacao-descricao="{{ $movimentacao->descricao }}" data-movimentacao-rotulo="{{ optional($movimentacao->cartao)->rotulo }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
+    @if($movimentacao->tipo == 'gasto' && $movimentacao->status != 'pago' && $movimentacao->fixo == 0 && $movimentacao->valor > 150) bg-red-900 @endif
     @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'pago') bg-green-900 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'pago') bg-blue-600 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'definido') bg-blue-800 @endif
