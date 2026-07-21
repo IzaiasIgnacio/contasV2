@@ -42,6 +42,7 @@ class MovimentacaoController extends Controller
         $nome = $request->input('nome');
         $valor = $request->input('valor');
         $descricao = $request->input('descricao');
+        $categoria = $request->input('categoria');
 
         if (empty($nome) || $valor === null || $valor === '') {
             return response()->json(['error' => 'Nome e valor são obrigatórios'], 422);
@@ -56,6 +57,7 @@ class MovimentacaoController extends Controller
         $movimentacao->nome = $nome;
         $movimentacao->valor = $valor;
         $movimentacao->descricao = $descricao;
+        $movimentacao->id_categoria = !empty($categoria) ? $categoria : null;
         $movimentacao->save();
 
         return response()->json(['success' => true, 'nome' => $movimentacao->nome, 'valor' => $movimentacao->valor, 'descricao' => $movimentacao->descricao]);

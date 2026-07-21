@@ -610,6 +610,7 @@ function openEditModal() {
     const nome = window.currentMovimentacaoElement.getAttribute('data-movimentacao-nome') || '';
     const valor = window.currentMovimentacaoElement.getAttribute('data-movimentacao-valor') || '';
     const descricao = window.currentMovimentacaoElement.getAttribute('data-movimentacao-descricao') || '';
+    const categoriaId = window.currentMovimentacaoElement.getAttribute('data-movimentacao-categoria') || '';
 
     // Hide context menu first
     hideContextMenu();
@@ -618,6 +619,10 @@ function openEditModal() {
     document.getElementById('editNome').value = nome;
     document.getElementById('editValor').value = valor;
     document.getElementById('editDescricao').value = descricao;
+    const categoriaSelect = document.getElementById('editCategoria');
+    if (categoriaSelect) {
+        categoriaSelect.value = categoriaId;
+    }
 
     document.getElementById('editModal').classList.remove('hidden');
     document.getElementById('editModal').classList.add('flex');
@@ -644,6 +649,7 @@ function salvarEdicao() {
     const nome = document.getElementById('editNome').value.trim();
     let valor = document.getElementById('editValor').value.trim();
     const descricao = document.getElementById('editDescricao').value.trim();
+    const categoria = document.getElementById('editCategoria')?.value || '';
     
     if (valor.includes(',')) {
         valor = valor.replace(/\./g, '').replace(',', '.');
@@ -661,7 +667,7 @@ function salvarEdicao() {
             'X-Requested-With': 'XMLHttpRequest',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ nome, valor, descricao })
+        body: JSON.stringify({ nome, valor, descricao, categoria })
     })
     .then(response => {
         if (!response.ok) {

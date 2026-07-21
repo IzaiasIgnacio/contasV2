@@ -29,6 +29,31 @@
                 </svg>
                 <input type="text" id="editValor" name="valor" placeholder="Valor" class="flex-1 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400">
             </div>
+            <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                </svg>
+                <select id="editCategoria" name="categoria" class="flex-1 bg-gray-800 text-white text-sm focus:outline-none placeholder-gray-400">
+                    <option value="" class="bg-gray-800">Selecione...</option>
+                    @php
+                        $currentGroup = null;
+                    @endphp
+                    @foreach ($categorias ?? [] as $categoria)
+                        @if ($currentGroup !== $categoria->grupo->nome)
+                            @if (!is_null($currentGroup))
+                                </optgroup>
+                            @endif
+                            <optgroup label="{{ $categoria->grupo->nome }}" class="bg-gray-800">
+                            @php $currentGroup = $categoria->grupo->nome; @endphp
+                        @endif
+                        <option value="{{ $categoria->id }}" class="bg-gray-800">{{ $categoria->nome }}</option>
+                    @endforeach
+                    @if (!is_null($currentGroup))
+                        </optgroup>
+                    @endif
+                </select>
+            </div>
             <div class="pt-4 flex gap-2">
                 <button type="submit" id="btnSalvarEdicao" class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-colors flex justify-center items-center">
                     <span id="textSalvarEdicao">SALVAR</span>

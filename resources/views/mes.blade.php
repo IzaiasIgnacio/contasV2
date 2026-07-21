@@ -10,7 +10,7 @@
     </button>
 </div>
 <div>
-    <div data-movimentacao-id="{{ $mes['salario_movimentacao']->id ?? '' }}" data-movimentacao-type="renda" data-movimentacao-nome="salario" data-movimentacao-valor="{{ $mes['salario'] }}" data-movimentacao-descricao="{{ $mes['salario_movimentacao']->descricao ?? '' }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
+    <div data-movimentacao-id="{{ $mes['salario_movimentacao']->id ?? '' }}" data-movimentacao-type="renda" data-movimentacao-nome="salario" data-movimentacao-valor="{{ $mes['salario'] }}" data-movimentacao-descricao="{{ $mes['salario_movimentacao']->descricao ?? '' }}" data-movimentacao-categoria="{{ $mes['salario_movimentacao']->id_categoria ?? '' }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
     @if($mes['status_salario'] == 'pago') bg-blue-600 @endif
     @if($mes['status_salario'] == 'definido') bg-blue-800 @endif
     ">
@@ -20,7 +20,7 @@
         <span class="text-gray-300 text-[15px] ">{{App\Models\Helper::format($mes['salario'])}}</span>
     </div>
     @foreach ($mes['movimentacoes'] as $movimentacao)
-    <div data-movimentacao-id="{{ $movimentacao->id }}" data-movimentacao-type="{{ $movimentacao->tipo }}" data-movimentacao-nome="{{ $movimentacao->nome }}" data-movimentacao-valor="{{ $movimentacao->valor }}" data-movimentacao-descricao="{{ $movimentacao->descricao }}" data-movimentacao-rotulo="{{ optional($movimentacao->cartao)->rotulo }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
+    <div data-movimentacao-id="{{ $movimentacao->id }}" data-movimentacao-type="{{ $movimentacao->tipo }}" data-movimentacao-nome="{{ $movimentacao->nome }}" data-movimentacao-valor="{{ $movimentacao->valor }}" data-movimentacao-descricao="{{ $movimentacao->descricao }}" data-movimentacao-categoria="{{ $movimentacao->id_categoria ?? '' }}" data-movimentacao-rotulo="{{ optional($movimentacao->cartao)->rotulo }}" class="flex justify-between items-center text-[15px] border-b border-gray-500 px-2 leading-snug linha_movimentacao
     @if($movimentacao->tipo == 'gasto' && $movimentacao->status != 'pago' && $movimentacao->fixo == 0 && $movimentacao->valor > 150) bg-red-900 @endif
     @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'pago') bg-green-900 @endif
     @if($movimentacao->tipo == 'renda' && $movimentacao->status == 'pago') bg-blue-600 @endif
@@ -30,6 +30,15 @@
     @if($movimentacao->tipo == 'gasto' && $movimentacao->status == 'definido') bg-gray-900 @endif
     ">
         <div class="flex items-center gap-1">
+            @php
+                $grupoIcone = null;
+                if (!empty($movimentacao->id_categoria)) {
+                    $categoria = App\Models\Categoria::find($movimentacao->id_categoria);
+                    if ($categoria && $categoria->grupo) {
+                        $grupoIcone = $categoria->grupo->icone;
+                    }
+                }
+            @endphp
             <span class="text-gray-300 text-[15px]">{{$movimentacao->nome}}</span>
             @if (!empty($movimentacao->cartao->cor))<div class="w-4 h-3 bg-{{$movimentacao->cartao->cor}} rounded text-xs border border-white/50 movimentacao-cartao-indicator" data-movimentacao-rotulo="{{ optional($movimentacao->cartao)->rotulo }}" onclick="event.stopPropagation(); showTooltip({{ json_encode(optional($movimentacao->cartao)->rotulo) }}, event.clientX, event.clientY)" onmouseleave="hideTooltip()"></div>@endif
             @if ($movimentacao->itau)
@@ -37,6 +46,13 @@
             @endif
             @if ($movimentacao->nb)
                 <span class="inline-flex items-center justify-center w-4 h-4 bg-purple-600 text-white text-xs font-bold rounded">N</span>
+            @endif
+            @if (!empty($grupoIcone))
+                <span class="inline-flex items-center justify-center w-4 h-4 text-gray-300 shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="14" width="14" viewBox="0 0 640 640">
+                        <path fill="rgb(206, 205, 205)" d="{!! $grupoIcone !!}"/>
+                    </svg>
+                </span>
             @endif
         </div>
         <span class="text-gray-300 text-[15px] ">{{App\Models\Helper::format($movimentacao->valor)}}</span>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cartao;
+use App\Models\Categoria;
 use App\Models\Consolidado;
 use App\Models\Movimentacao;
 use App\Models\Terceiros;
@@ -35,6 +36,7 @@ class IndexController extends Controller
                 $movimentacao->status = $request->status;
                 $movimentacao->responsavel = $request->responsavel;
                 $movimentacao->id_cartao = !empty($request->cartao) ? $request->cartao : null;
+                $movimentacao->id_categoria = !empty($request->categoria) ? $request->categoria : null;
                 $movimentacao->total_parcelas = $request->parcelas;
                 $movimentacao->parcela = $parcela;
                 $movimentacao->id_parcela = $id_parcela;
@@ -84,6 +86,12 @@ class IndexController extends Controller
             'terceiros' => $terceiros->listar(),
             'antigo' => $consolidado->where('nome', 'chah')->first()->valor,
             'cartoes' => $cartoes,
+            'categorias' => Categoria::with('grupo')
+                ->join('grupo', 'categoria.id_grupo', '=', 'grupo.id')
+                ->orderBy('grupo.nome')
+                ->orderBy('categoria.nome')
+                ->select('categoria.*')
+                ->get(),
             'total' => $total,
             'mes_atual' => $mes_atual,
             'ano_atual' => $ano_atual,
