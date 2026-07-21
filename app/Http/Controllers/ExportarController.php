@@ -105,7 +105,7 @@ class ExportarController extends Controller {
             $resultado["chah"][] = [
                 "mes" => ucfirst($mes->locale('pt_BR')->translatedFormat('F')),
                 "gastos" => $chahRegistros->sum('valor'),
-                "antigo" => Consolidado::where('nome', 'chah')->first()->valor,
+                "antigo" => Consolidado::where('nome', 'chah')->first()->valor - 100,
                 "registros" => $chahRegistros->map(function ($m) {
                     return [
                         "nome" => $m->nome,
