@@ -18,6 +18,10 @@ class Movimentacao extends Model
         return $this->hasOne(Cartao::class, 'id', 'id_cartao');
     }
 
+    public function categoria() {
+        return $this->belongsTo(Categoria::class, 'id_categoria');
+    }
+
     public function mes($data) {
         $this->definirValoresFixosMes($data);
         $this->rescisao($data->copy());

@@ -60,6 +60,11 @@ class MovimentacaoController extends Controller
         $movimentacao->id_categoria = !empty($categoria) ? $categoria : null;
         $movimentacao->save();
 
+        if (!empty($movimentacao->id_parcela)) {
+            Movimentacao::where('id_parcela', $movimentacao->id_parcela)
+                ->update(['id_categoria' => $movimentacao->id_categoria]);
+        }
+
         return response()->json(['success' => true, 'nome' => $movimentacao->nome, 'valor' => $movimentacao->valor, 'descricao' => $movimentacao->descricao]);
     }
 

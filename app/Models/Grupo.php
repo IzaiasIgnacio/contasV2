@@ -11,4 +11,9 @@ class Grupo extends Model
 
     protected $table = 'grupo';
     public $timestamps = false;
+
+    public function categorias()
+    {
+        return $this->hasMany(Categoria::class, 'id_grupo');
+    }
 }

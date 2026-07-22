@@ -47,6 +47,17 @@
                 @endforeach
             </div>
         </section>
+
+        <!-- Tabelas de Grupos -->
+        <section class="px-2 pt-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3">
+                @foreach ($movimentacoes_mes as $mes)
+                    <div class="bg-gray-900 rounded-lg border border-gray-700">
+                        @include('grupos', ['mes' => $mes])
+                    </div>
+                @endforeach
+            </div>
+        </section>
     </main>
 
     <!-- Modal para Adicionar Transação -->
