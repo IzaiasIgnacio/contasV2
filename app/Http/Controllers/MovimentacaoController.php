@@ -221,6 +221,7 @@ class MovimentacaoController extends Controller
                 $movimentacao->total_parcelas = $gasto['parcelas'];
                 $movimentacao->parcela = $parcela;
                 $movimentacao->id_parcela = $id_parcela;
+                $movimentacao->id_categoria = $gasto['categoria'];
                 $movimentacao->save();
             }
         }
@@ -248,6 +249,11 @@ class MovimentacaoController extends Controller
         curl_exec($ch);
     }
 
+    private function extrairIdCategoria($categoriaProp) {
+        $partes = explode(" - ", $categoriaProp);
+        return trim(end($partes));
+    }
+
     private function mapGastos($pages) {
         return $pages->map(function($gastoPage) {
             $nomeProp = $gastoPage->getProperty('Name');
@@ -257,6 +263,7 @@ class MovimentacaoController extends Controller
             $parcelasProp = $gastoPage->getProperty('parcelas');
             $pixProp = $gastoPage->getProperty('pix');
             $viradoProp = $gastoPage->getProperty('virado');
+            $categoriaProp = $gastoPage->getProperty('categoria');
             // $tipoProp = $gastoPage->getProperty('tipo');
             // $responsavelProp = $gastoPage->getProperty('responsavel');
 
@@ -272,6 +279,7 @@ class MovimentacaoController extends Controller
 
                 // Propriedades de Select podem usar getName() para obter o nome da opção
                 'cartao' => $cartaoProp && $cartaoProp->getItem() ? $cartaoProp->getName() : null,
+                'categoria' => $this->extrairIdCategoria($categoriaProp->getName()),
 
                 // Propriedades de Checkbox usam isChecked()
                 'pix' => $pixProp ? $pixProp->isChecked() : false,
