@@ -131,6 +131,7 @@ class IndexController extends Controller
                     }
                 }
             }
+
             $movimentacoes_mes[$i]['total_gastos'] = $mes['movimentacoes']->where('tipo', 'gasto')->where('status', '<>', 'pago')->sum('valor');
             $movimentacoes_mes[$i]['total_rendas'] = $mes['movimentacoes']->where('tipo', 'renda')->where('status', '<>', 'pago')->sum('valor') + $cdb;
             $movimentacoes_mes[$i]['sobra'] = $movimentacoes_mes[$i]['total_rendas'] - $movimentacoes_mes[$i]['total_gastos'];
@@ -148,6 +149,7 @@ class IndexController extends Controller
                 ->where('total_parcelas', '>', 1)
                 ->filter(fn($mov) => $mov->parcela == $mov->total_parcelas)
                 ->sum('valor');
+            $movimentacoes_mes[$i]['parcelas'] = $mes['movimentacoes']->where('tipo', 'gasto')->where('total_parcelas', '>', 1)->sum('valor');
             $total += $movimentacoes_mes[$i]['sobra'];
         }
 

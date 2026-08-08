@@ -81,6 +81,12 @@
 </div>
 <div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-red-800">
     <div class="flex items-center gap-1">
+        <span class="text-gray-300 text-[15px] font-semibold">Parcelas</span>
+    </div>
+    <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['parcelas'])}}</span>
+</div>
+<div class="flex justify-between items-center text-sm border-b border-gray-500 px-2 bg-red-800">
+    <div class="flex items-center gap-1">
         <span class="text-gray-300 text-[15px] font-semibold">Encerrados</span>
     </div>
     <span class="text-gray-300 text-[15px] font-semibold">{{App\Models\Helper::format($mes['encerrados'])}}</span>

@@ -80,44 +80,53 @@ class Movimentacao extends Model
             ],
             "gas" => [
                 'valor' => 250,
-                'descricao' => null
+                'descricao' => null,
+                'id_categoria' => 12
             ],
             "claro" => [
-                'valor' => 87.82,
-                'descricao' => 'globoplay'
+                'valor' => 93.3,
+                'descricao' => 'fibra',
+                'id_categoria' => 28
             ],
             "clarotv" => [
                 'valor' => 54,
-                'descricao' => 'prime, disney, apple, netflix, max'
+                'descricao' => 'prime, disney, apple, netflix, max',
+                'id_categoria' => 21
             ],
             "prime" => [
                 'valor' => 10,
-                'descricao' => 'ad-free'
+                'descricao' => 'ad-free',
+                'id_categoria' => 21
             ],
             'google' => [
-                'valor' => 33.29,
-                'descricao' => 'Youtube Premium'
+                'valor' => 43.9,
+                'descricao' => 'Youtube Premium',
+                'id_categoria' => 21
             ],
             'meli' => [
                 'valor' => 9.90,
-                'descricao' => null
+                'descricao' => null,
+                'id_categoria' => 21
             ],
             "m" => [
                 'valor' => 1400,
-                'descricao' => 'Mãe'
+                'descricao' => 'Mãe',
+                'id_categoria' => 24
             ],
             'luz' => [
                 'valor' => 350,
-                'descricao' => null
+                'descricao' => null,
+                'id_categoria' => 28
             ],
             'merc' => [
                 'valor' => 0,
-                'descricao' => 'Mercado'
+                'descricao' => 'Mercado',
+                'id_categoria' => 28
             ],
             'klini' => [
                 'valor' => 302,
-                'descricao' => 'Saúde'
-            ]
+                'descricao' => 'Saúde',
+                'id_categoria' => 22           ]
         ];
 
         $p = 1;
@@ -132,6 +141,7 @@ class Movimentacao extends Model
                 $mov->status = 'definido';
                 $mov->posicao = ($nome != 'salario') ? 0 : $p;
                 $mov->fixo = true;
+                $mov->id_categoria = $valores['id_categoria'] ?? null;
                 $mov->save();
                 if ($nome != 'salario') {
                     $p++;
@@ -143,8 +153,7 @@ class Movimentacao extends Model
             'klini' => 302,
             'clarotv' => 84.9,
             'vivo' => 44.42,
-            'globoplay' => 6.45,
-            'youtube' => 8.6,
+            'youtube' => 10,
             'nubank' => null,
             'luz' => null
         ];
