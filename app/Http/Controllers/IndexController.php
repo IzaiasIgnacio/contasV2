@@ -50,7 +50,11 @@ class IndexController extends Controller
         $cartao = new Cartao();
         $cartoes = $cartao->listaCartoesAtivos();
         $total = $consolidado->where('totais', 1)->sum('valor');
-        $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.$consolidado->where('nome', 'mes_atual')->first()->valor);
+
+        $nomesConsolidados = ['mes_atual', 'itau', 'nubank', 'cofrinho', 'casa', 'mp', 'caixinha2', 'caixinha', 'chah'];
+        $consolidados = Consolidado::whereIn('nome', $nomesConsolidados)->get()->keyBy('nome');
+
+        $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.$consolidados->get('mes_atual')->valor);
         $ano_atual = $data->year;
         $mes_atual = ucfirst($data->locale('pt-br')->monthName);
         $mes_atual_numero = $data->month;
@@ -67,24 +71,24 @@ class IndexController extends Controller
 
         // Buscar valores atuais das contas
         $valor_contas = [
-            'itau' => Consolidado::where('nome', 'itau')->first() ?? 0,
-            'nubank' => Consolidado::where('nome', 'nubank')->first() ?? 0,
-            'cofrinho' => Consolidado::where('nome', 'cofrinho')->first() ?? 0,
-            'casa' => Consolidado::where('nome', 'casa')->first() ?? 0,
-            'mercado_pago' => Consolidado::where('nome', 'mp')->first() ?? 0,
-            'caixinha2' => Consolidado::where('nome', 'caixinha2')->first() ?? 0,
-            'caixinha' => Consolidado::where('nome', 'caixinha')->first() ?? 0
+            'itau' => $consolidados->get('itau'),
+            'nubank' => $consolidados->get('nubank'),
+            'cofrinho' => $consolidados->get('cofrinho'),
+            'casa' => $consolidados->get('casa'),
+            'mercado_pago' => $consolidados->get('mp'),
+            'caixinha2' => $consolidados->get('caixinha2'),
+            'caixinha' => $consolidados->get('caixinha')
         ];
         
 
         // Calcular diferenças (total movimentações - valor atual na conta)
-        $diferenca_itau = $valor_contas['itau']->valor - $total_itau;
-        $diferenca_nb = $valor_contas['nubank']->valor - $total_nb;
+        $diferenca_itau = ($valor_contas['itau'] ? $valor_contas['itau']->valor : 0) - $total_itau;
+        $diferenca_nb = ($valor_contas['nubank'] ? $valor_contas['nubank']->valor : 0) - $total_nb;
 
         return view('index', [
-            'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes),
+            'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes, $consolidados),
             'terceiros' => $terceiros->listar(),
-            'antigo' => $consolidado->where('nome', 'chah')->first()->valor,
+            'antigo' => $consolidados->get('chah') ? $consolidados->get('chah')->valor : 0,
             'cartoes' => $cartoes,
             'categorias' => Categoria::with('grupo')
                 ->join('grupo', 'categoria.id_grupo', '=', 'grupo.id')
@@ -117,8 +121,8 @@ class IndexController extends Controller
         return response()->json(['success' => true]);
     }
 
-    private function calculosExtrasMeses($total, $movimentacoes_mes) {
-        $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.Consolidado::where('nome', 'mes_atual')->first()->valor);
+    private function calculosExtrasMeses($total, $movimentacoes_mes, $consolidados) {
+        $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.$consolidados->get('mes_atual')->valor);
         $cdb = 0;
 
         foreach ($movimentacoes_mes as $i =>$mes) {
