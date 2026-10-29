@@ -9,7 +9,7 @@
             </button>
         </div>
 
-        <div class="space-y-4 max-h-96 overflow-y-auto" id="contasInputsContainer">
+        <div class="space-y-4 max-h-97 overflow-y-auto" id="contasInputsContainer">
             <!-- Nubank -->
             <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
                 <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">NU</div>
@@ -29,6 +29,13 @@
                 <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">C2</div>
                 <span class="text-white text-sm flex-1">Caixinha2 ({{ \Carbon\Carbon::parse($valor_contas['caixinha2']->data_atualizacao)->format('d/m/Y H:i') }})</span>
                 <input data-nome="caixinha2" value="{{$valor_contas['caixinha2']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
+            </div>
+
+            <!-- Caixinha Nucel -->
+            <div class="flex items-center gap-3 pb-2 border-b border-gray-600">
+                <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-xs">CN</div>
+                <span class="text-white text-sm flex-1">Caixinha Nucel ({{ \Carbon\Carbon::parse($valor_contas['caixinha_nucel']->data_atualizacao)->format('d/m/Y H:i') }})</span>
+                <input data-nome="caixinha_nucel" value="{{$valor_contas['caixinha_nucel']->valor}}" type="text" step="0.01" placeholder="0,00" class="w-20 bg-transparent text-white text-sm focus:outline-none placeholder-gray-400 text-right">
             </div>
 
             <!-- Itaú -->

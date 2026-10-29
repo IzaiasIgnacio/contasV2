@@ -5,25 +5,27 @@
 </div>
 @php
     $categoriasPorMes = [];
+
+    // 1. Inicializa TODAS as categorias com total = 0, usando a coleção já carregada no controller
+    foreach ($categorias as $categoria) {
+        $categoriasPorMes[$categoria->id] = (object) [
+            'nome' => $categoria->nome,
+            'grupo_nome' => $categoria->grupo ? $categoria->grupo->nome : 'Sem Grupo',
+            'total' => 0,
+        ];
+    }
+
+    // 2. Soma os valores das movimentações do mês
     foreach ($mes['movimentacoes'] as $movimentacao) {
         if ($movimentacao->tipo !== 'gasto' || empty($movimentacao->id_categoria)) {
             continue;
         }
 
-        $categoria = App\Models\Categoria::find($movimentacao->id_categoria);
-        if (!$categoria) {
-            continue;
+        if (!isset($categoriasPorMes[$movimentacao->id_categoria])) {
+            continue; // categoria não existe mais / foi removida
         }
 
-        if (!isset($categoriasPorMes[$categoria->id])) {
-            $categoriasPorMes[$categoria->id] = (object) [
-                'nome' => $categoria->nome,
-                'grupo_nome' => $categoria->grupo ? $categoria->grupo->nome : 'Sem Grupo',
-                'total' => 0,
-            ];
-        }
-
-        $categoriasPorMes[$categoria->id]->total += (float) $movimentacao->valor;
+        $categoriasPorMes[$movimentacao->id_categoria]->total += (float) $movimentacao->valor;
     }
 
     usort($categoriasPorMes, function ($a, $b) {

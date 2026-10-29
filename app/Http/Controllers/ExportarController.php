@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\NotionController;
 use App\Models\Movimentacao;
 use App\Models\Consolidado;
 use App\Models\Rescisao;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Storage;
 
 class ExportarController extends Controller {
     
@@ -73,7 +73,13 @@ class ExportarController extends Controller {
                         "status" => $m->status,
                         "tipo" => $m->tipo,
                     ];
-                })->values()->toArray()
+                })->sortBy([
+                    ['tipo', 'asc'],
+                    ['fixo', 'desc'],
+                    ['status', 'asc'],
+                    ['ordem_parcela', 'desc'],
+                    ['nome', 'asc'],
+                ])->values()->toArray()
             ];
 
             if ($i > 1) {
@@ -119,8 +125,11 @@ class ExportarController extends Controller {
     }
 
     public function exportar() {
+        $notion = new NotionController();
+        $notion->exportar();
+        
         $data = $this->gerarRelatorio();
-
+        // return $data;
         // Criar dump do banco de dados
         $dumpFile = 'db_contasV2.sql';
         $path = '/mnt/host/db/' . $dumpFile;
@@ -151,7 +160,9 @@ class ExportarController extends Controller {
         $response = \Illuminate\Support\Facades\Http::withHeaders([
             'Content-Type' => 'application/json',
             'X-Master-key' => env('JSONBIN_KEY'),
-        ])->put('https://api.jsonbin.io/v3/b/'.env('JSONBIN_ID'), $data);
+        ])
+        ->timeout(10)
+        ->put('https://api.jsonbin.io/v3/b/'.env('JSONBIN_ID'), $data);
         
         $result = ['dump_success' => $dumpSuccess];
         if ($dumpSuccess) {

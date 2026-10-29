@@ -30,6 +30,7 @@ Route::get('/movimentacao/notion', [App\Http\Controllers\MovimentacaoController:
 Route::get('/movimentacao/fechar_mes/{mes}', [App\Http\Controllers\MovimentacaoController::class, 'fecharMes']);
 
 Route::get('exportar', [App\Http\Controllers\ExportarController::class, 'exportar']);
+Route::get('exportar/notion', [App\Http\Controllers\NotionController::class, 'exportar']);
 
 Route::get('/teste', function () {
     return view('teste');

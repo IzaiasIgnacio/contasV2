@@ -22,54 +22,102 @@ class Movimentacao extends Model
         return $this->belongsTo(Categoria::class, 'id_categoria');
     }
 
-    public function mes($data) {
-        $this->definirValoresFixosMes($data);
-        $this->rescisao($data->copy());
+    /**
+     * Versão em lote de mes(): recebe um array de instâncias Carbon (uma por mês)
+     * e retorna o mesmo formato que mes() retornaria para cada uma, mas fazendo
+     * apenas 2 consultas de leitura no total (movimentacoes + rescisoes) em vez
+     * de 3 consultas por mês.
+     *
+     * As gravações (definirValoresFixosMes e rescisao) continuam sendo feitas
+     * mês a mês, pois rescisao() depende do subtotal do mês anterior.
+     */
+    public function mesesEmLote(array $datas): array {
+        // 1) Garante que os lançamentos fixos e a rescisão de cada mês existem.
+        //    Isso precisa continuar em loop (é gravação, e rescisao() é sequencial
+        //    por depender do mês anterior), mas não faz leitura de movimentações.
+        foreach ($datas as $data) {
+            $this->definirValoresFixosMes($data);
+            $this->rescisao($data->copy());
+        }
 
-        $salarioMovimentacao = $this->whereMonth('data', $data->format('m'))
-            ->whereYear('data', $data->format('Y'))
-            ->where('nome', 'salario')
-            ->first();
+        // 2) Uma única leitura cobrindo todo o intervalo, em vez de 3 consultas por mês.
+        $dataInicio = $datas[0]->copy()->startOfMonth()->format('Y-m-d');
+        $dataFim = end($datas)->copy()->endOfMonth()->format('Y-m-d');
 
-        $mes = [
-            'mes' => ucfirst($data->locale('pt-br')->monthName),
-            'numero_mes' => $data->locale('pt-br')->month,
-            'ano' => $data->locale('pt-br')->year,
-            'movimentacoes' => $this
-                                ->whereMonth('data', $data->format('m'))
-                                ->whereYear('data', $data->format('Y'))
-                                ->whereNotIn('tipo', ['save', 'terceiros'])
-                                ->where('nome', '!=', 'salario')
-                                    ->orderBy('tipo')
-                                    ->orderByDesc('fixo')
-                                    ->orderBy('status')
-                                    ->orderByDesc(DB::raw('total_parcelas - parcela'))
-                                    ->orderBy('nome')
-                                        ->get(),
-            'salario' => $salarioMovimentacao ? $salarioMovimentacao->valor : 0,
-            'status_salario' => $salarioMovimentacao ? $salarioMovimentacao->status : 'definido',
-            'salario_movimentacao' => $salarioMovimentacao,
-            'rescisao' => Rescisao::where('data', $data->format('Y-m-d'))->first()->subtotal - Rescisao::where('data', $data->format('Y-m-d'))->first()->retirada + 10286,
-        ];
-        
-        $mes['terceiros'] = $this
-                                ->whereMonth('data', $data->format('m'))
-                                ->whereYear('data', $data->format('Y'))
-                                ->where('tipo', 'terceiros')
-                                    ->orderBy('responsavel')
-                                    ->orderBy('nome')
-                                        ->get();
+        $todasMovimentacoes = $this
+            ->whereBetween('data', [$dataInicio, $dataFim])
+            ->get()
+            ->groupBy(fn ($mov) => \Carbon\Carbon::parse($mov->data)->format('Y-m'));
 
-        $mes['total_terceiros'] = $mes['terceiros']
-            ->groupBy('responsavel')
-            ->mapWithKeys(function ($items, $responsavel) {
-                return [$responsavel => $items->sum('valor')];
-            })
-            ->toArray();
-        
-        $mes['total_terceiros']['mae'] -= 1400;
+        $todasRescisoes = Rescisao::whereBetween('data', [$dataInicio, $dataFim])
+            ->get()
+            ->keyBy(fn ($r) => \Carbon\Carbon::parse($r->data)->format('Y-m-d'));
 
-        return $mes;
+        // 3) Monta o array de meses em PHP, sem nenhuma query adicional.
+        $resultado = [];
+        foreach ($datas as $i => $data) {
+            $grupoMes = $todasMovimentacoes->get($data->format('Y-m'), collect());
+
+            $salarioMovimentacao = $grupoMes->firstWhere('nome', 'salario');
+
+            $movimentacoesMes = $grupoMes
+                ->whereNotIn('tipo', ['save', 'terceiros'])
+                ->where('nome', '!=', 'salario')
+                ->each(function ($mov) {
+                    $mov->ordem_parcela = ($mov->total_parcelas ?? 0) - ($mov->parcela ?? 0);
+                })
+                ->sortBy([
+                    ['tipo', 'asc'],
+                    ['fixo', 'desc'],
+                    ['ordem_parcela', 'desc'],
+                    ['status', 'asc'],
+                    ['nome', 'asc']                    
+                ])
+                ->values();
+
+            $terceirosMes = $grupoMes
+                ->where('tipo', 'terceiros')
+                ->sortBy([
+                    ['responsavel', 'asc'],
+                    ['nome', 'asc'],
+                ])
+                ->values();
+
+            $rescisaoMes = $todasRescisoes->get($data->format('Y-m-d'));
+
+            $mes = [
+                'mes' => ucfirst($data->locale('pt-br')->monthName),
+                'numero_mes' => $data->locale('pt-br')->month,
+                'ano' => $data->locale('pt-br')->year,
+                'movimentacoes' => $movimentacoesMes,
+                'salario' => $salarioMovimentacao ? $salarioMovimentacao->valor : 0,
+                'status_salario' => $salarioMovimentacao ? $salarioMovimentacao->status : 'definido',
+                'salario_movimentacao' => $salarioMovimentacao,
+                'rescisao' => $rescisaoMes ? ($rescisaoMes->subtotal - $rescisaoMes->retirada + 10286) : 10286,
+            ];
+
+            $mes['terceiros'] = $terceirosMes;
+
+            $mes['total_terceiros'] = $terceirosMes
+                ->groupBy('responsavel')
+                ->mapWithKeys(function ($items, $responsavel) {
+                    return [$responsavel => $items->sum('valor')];
+                })
+                ->toArray();
+
+            if (isset($mes['total_terceiros']['mae'])) {
+                $mes['total_terceiros']['mae'] -= 1400;
+            }
+
+            $mae_pago = Consolidado::where('nome', 'pago')->first();
+            if (\Carbon\Carbon::parse($mae_pago->data_atualizacao)->format('m') == $data->format('m')) {
+                $mes['total_terceiros']['mae'] -= $mae_pago->valor;
+            }
+
+            $resultado[$i] = $mes;
+        }
+
+        return $resultado;
     }
 
     private function definirValoresFixosMes($data) {
@@ -84,7 +132,7 @@ class Movimentacao extends Model
                 'id_categoria' => 12
             ],
             "claro" => [
-                'valor' => 93.3,
+                'valor' => 93.9,
                 'descricao' => 'fibra',
                 'id_categoria' => 28
             ],
@@ -176,7 +224,9 @@ class Movimentacao extends Model
 
         $valores_fixos = [
             'google' => 4,
-            'divida' => 100
+            'divida' => 100,
+            'alelo' => -800,
+            'aluguel' => -200
         ];
 
         $p = 1;

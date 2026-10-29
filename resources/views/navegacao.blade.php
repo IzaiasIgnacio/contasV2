@@ -18,7 +18,7 @@
                     <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                 </svg>
             </button>
-            <p class="text-xl lg:text-2xl text-white-400">{{App\Models\Helper::format($total)}}</p>
+            <p class="text-xl lg:text-2xl text-white-400">{{App\Models\Helper::format($total + $quitados)}}</p>
         </div>
 
         <!-- Totais por conta -->
@@ -35,6 +35,10 @@
             <p class="text-l text-white-400">{{App\Models\Helper::format($valor_contas['caixinha2']->valor)}}</p>
         </div>
         <div class="flex items-center gap-3">
+            <span class="inline-flex items-center justify-center w-6 h-6 bg-purple-600 text-white text-xs font-bold rounded">CN</span>
+            <p class="text-l text-white-400">{{App\Models\Helper::format($valor_contas['caixinha_nucel']->valor)}}</p>
+        </div>
+        <div class="flex items-center gap-3">
             <span class="inline-flex items-center justify-center w-6 h-6 bg-orange-500 text-white text-xs font-bold rounded">IT</span>
             <p class="text-l text-white-400">{{App\Models\Helper::format($valor_contas['itau']->valor)}}</p>
         </div>
@@ -49,6 +53,10 @@
         <div class="flex items-center gap-3">
             <span class="inline-flex items-center justify-center w-6 h-6 bg-green-600 text-white text-xs font-bold rounded">CS</span>
             <p class="text-l text-white-400">{{App\Models\Helper::format($valor_contas['casa']->valor)}}</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center justify-center w-6 h-6 bg-green-600 text-white text-xs font-bold rounded">QT</span>
+            <p class="text-l text-white-400">{{App\Models\Helper::format($quitados)}}</p>
         </div>
         
         <!-- Nubank e Itaú -->

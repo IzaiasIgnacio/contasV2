@@ -279,7 +279,7 @@ class MovimentacaoController extends Controller
 
                 // Propriedades de Select podem usar getName() para obter o nome da opção
                 'cartao' => $cartaoProp && $cartaoProp->getItem() ? $cartaoProp->getName() : null,
-                'categoria' => $this->extrairIdCategoria($categoriaProp->getName()),
+                'categoria' => $categoriaProp ? $this->extrairIdCategoria($categoriaProp->getName()) : null,
 
                 // Propriedades de Checkbox usam isChecked()
                 'pix' => $pixProp ? $pixProp->isChecked() : false,

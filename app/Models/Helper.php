@@ -11,19 +11,6 @@ class Helper {
         // Formata com 2 casas decimais se houver centavos
         return number_format($valor, 2, ',', '.');
     }
-    
-    // public function getTotalSavingsAtual() {
-    //     return Consolidado::get('caixinha2');
-    // }
-
-    // // total incluindo savings
-    // public function getTotal() {
-    //     return $this->format(Consolidado::where('totais', 1)->sum('valor'));
-    // }
-
-    // public function getTotalAtual() {
-    //     return $this->format(Consolidado::where('atual', 1)->sum('valor'));
-    // }
 
     public static function data_fechamento($vencimento, $dias_fechamento) {
         $data = \Carbon\Carbon::createFromFormat('d/m/Y', $vencimento.'/'.Consolidado::where('nome', 'mes_atual')->first()->valor);

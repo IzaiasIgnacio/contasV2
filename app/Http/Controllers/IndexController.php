@@ -45,25 +45,25 @@ class IndexController extends Controller
             return redirect('/');
         }
 
+        $nomesConsolidados = ['mes_atual', 'itau', 'nubank', 'cofrinho', 'casa', 'mp', 'caixinha2', 'caixinha_nucel', 'caixinha', 'chah'];
+        $consolidados = Consolidado::whereIn('nome', $nomesConsolidados)->get()->keyBy('nome');
+
         $movimentacao = new Movimentacao();
-        $consolidado = new Consolidado();
         $cartao = new Cartao();
         $cartoes = $cartao->listaCartoesAtivos();
-        $total = $consolidado->where('totais', 1)->sum('valor');
-
-        $nomesConsolidados = ['mes_atual', 'itau', 'nubank', 'cofrinho', 'casa', 'mp', 'caixinha2', 'caixinha', 'chah'];
-        $consolidados = Consolidado::whereIn('nome', $nomesConsolidados)->get()->keyBy('nome');
+        $total = $consolidados->where('totais', 1)->sum('valor');
 
         $data = \Carbon\Carbon::createFromFormat('d/m/Y', '01/'.$consolidados->get('mes_atual')->valor);
         $ano_atual = $data->year;
         $mes_atual = ucfirst($data->locale('pt-br')->monthName);
         $mes_atual_numero = $data->month;
 
-        $movimentacoes_mes = [];
+        $datas_meses = [];
         for ($i=0;$i<=7;$i++) {
-            $movimentacoes_mes[$i] = $movimentacao->mes($data);
+            $datas_meses[$i] = $data->copy();
             $data->addMonth();
         }
+        $movimentacoes_mes = $movimentacao->mesesEmLote($datas_meses);
 
         // Calcular somas de nb e itau
         $total_nb = $movimentacao->where('nb', true)->sum('valor');
@@ -77,6 +77,7 @@ class IndexController extends Controller
             'casa' => $consolidados->get('casa'),
             'mercado_pago' => $consolidados->get('mp'),
             'caixinha2' => $consolidados->get('caixinha2'),
+            'caixinha_nucel' => $consolidados->get('caixinha_nucel'),
             'caixinha' => $consolidados->get('caixinha')
         ];
         
@@ -84,6 +85,13 @@ class IndexController extends Controller
         // Calcular diferenças (total movimentações - valor atual na conta)
         $diferenca_itau = ($valor_contas['itau'] ? $valor_contas['itau']->valor : 0) - $total_itau;
         $diferenca_nb = ($valor_contas['nubank'] ? $valor_contas['nubank']->valor : 0) - $total_nb;
+
+        $quitados = $movimentacao->
+            where('quitado', true)
+            ->where('tipo', 'gasto')
+            // ->where('data', '>=', $datas_meses[0]->copy()->startOfMonth())
+            ->where('status', '<>', 'pago')
+                ->sum('valor');
 
         return view('index', [
             'movimentacoes_mes' => $this->calculosExtrasMeses($total, $movimentacoes_mes, $consolidados),
@@ -97,6 +105,7 @@ class IndexController extends Controller
                 ->select('categoria.*')
                 ->get(),
             'total' => $total,
+            'quitados' => $quitados,
             'mes_atual' => $mes_atual,
             'ano_atual' => $ano_atual,
             'mes_atual_numero' => $mes_atual_numero,
@@ -136,7 +145,9 @@ class IndexController extends Controller
                 }
             }
 
-            $movimentacoes_mes[$i]['total_gastos'] = $mes['movimentacoes']->where('tipo', 'gasto')->where('status', '<>', 'pago')->sum('valor');
+            $quitados = $mes['movimentacoes']->where('tipo', 'gasto')->where('quitado', true)->where('status', '<>', 'pago')->sum('valor');
+
+            $movimentacoes_mes[$i]['total_gastos'] = $mes['movimentacoes']->where('tipo', 'gasto')->where('status', '<>', 'pago')->sum('valor') - $quitados;
             $movimentacoes_mes[$i]['total_rendas'] = $mes['movimentacoes']->where('tipo', 'renda')->where('status', '<>', 'pago')->sum('valor') + $cdb;
             $movimentacoes_mes[$i]['sobra'] = $movimentacoes_mes[$i]['total_rendas'] - $movimentacoes_mes[$i]['total_gastos'];
             $movimentacoes_mes[$i]['sobra'] += ($mes['status_salario'] == 'definido') ? $mes['salario'] : 0;
@@ -145,7 +156,8 @@ class IndexController extends Controller
             $movimentacoes_mes[$i]['novos'] = $mes['movimentacoes']
                 ->where('tipo', 'gasto')
                 ->where('fixo', false)
-                ->filter(fn($mov) => is_null($mov->parcela) || $mov->parcela == 1)
+                // ->filter(fn($mov) => is_null($mov->parcela) || $mov->parcela == 1)
+                ->where('total_parcelas', 1)
                 ->sum('valor');
             $movimentacoes_mes[$i]['encerrados'] = $mes['movimentacoes']
                 ->where('tipo', 'gasto')
@@ -153,7 +165,13 @@ class IndexController extends Controller
                 ->where('total_parcelas', '>', 1)
                 ->filter(fn($mov) => $mov->parcela == $mov->total_parcelas)
                 ->sum('valor');
-            $movimentacoes_mes[$i]['parcelas'] = $mes['movimentacoes']->where('tipo', 'gasto')->where('total_parcelas', '>', 1)->sum('valor');
+            $movimentacoes_mes[$i]['parcelas'] = $mes['movimentacoes']
+                ->where('tipo', 'gasto')
+                ->where('quitado', false)
+                ->whereNotIn('id_categoria', [21, 22, 23, 24, 28]) // fixos
+                ->where('total_parcelas', '>', 1)
+                ->sum('valor');
+            $movimentacoes_mes[$i]['quitados'] = $quitados;
             $total += $movimentacoes_mes[$i]['sobra'];
         }
 
