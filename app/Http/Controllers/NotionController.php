@@ -192,7 +192,7 @@ class NotionController extends Controller
                 ->orderByDesc('fixo')
                 ->orderBy('nome')
                 ->orderBy('status')
-                    ->get(['nome', 'valor', 'descricao']);
+                    ->get(['nome', 'valor', 'descricao', 'tipo']);
     }
 
     /**
@@ -385,7 +385,11 @@ class NotionController extends Controller
 
         foreach ($registros as $registro) {
             $valor = (float) $registro->valor;
-            $somaTotal += $valor;
+            if ($registro->tipo === 'renda') {
+                $somaTotal -= $valor;
+            } else {
+                $somaTotal += $valor;
+            }
 
             $linhas[] = $this->montarLinhaTabela([
                 $registro->nome,

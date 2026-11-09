@@ -189,6 +189,7 @@ class MovimentacaoController extends Controller
         }
 
         $mov = Movimentacao::where('nome', $gasto['nome'])
+                            ->where('tipo', 'gasto')
                             ->where('id_cartao', $cartaoId)
                             ->whereMonth('data', $data->format('m'))
                             ->whereYear('data', $data->format('Y'))
