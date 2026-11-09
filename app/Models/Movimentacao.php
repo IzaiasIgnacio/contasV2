@@ -126,6 +126,10 @@ class Movimentacao extends Model
                 'valor' => Consolidado::where('nome', 'salario')->first()->valor,
                 'descricao' => null
             ],
+            "beneficios" => [
+                'valor' => 2365,
+                'descricao' => 'caju'
+            ],
             "gas" => [
                 'valor' => 250,
                 'descricao' => null,
@@ -167,9 +171,14 @@ class Movimentacao extends Model
                 'id_categoria' => 28
             ],
             'merc' => [
-                'valor' => 0,
+                'valor' => 1500,
                 'descricao' => 'Mercado',
                 'id_categoria' => 28
+            ],
+            'alm' => [
+                'valor' => 615,
+                'descricao' => null,
+                'id_categoria' => 1
             ],
             'klini' => [
                 'valor' => 302,
@@ -184,10 +193,10 @@ class Movimentacao extends Model
                 $mov->nome = $nome;
                 $mov->descricao = $valores['descricao'];
                 $mov->valor = $valores['valor'];
-                $mov->tipo = ($nome != 'salario') ? 'gasto' :  'renda';
+                $mov->tipo = in_array($nome, ['salario', 'beneficios']) ? 'renda' : 'gasto';
                 $mov->data = $data->format('Y-m-d');
                 $mov->status = 'definido';
-                $mov->posicao = ($nome != 'salario') ? 0 : $p;
+                // $mov->posicao = ($nome != 'salario') ? 0 : $p;
                 $mov->fixo = true;
                 $mov->id_categoria = $valores['id_categoria'] ?? null;
                 $mov->save();
